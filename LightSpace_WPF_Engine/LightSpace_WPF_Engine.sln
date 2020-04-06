@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29728.190
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LightSpace_WPF_Engine", "LightSpace_WPF_Engine\LightSpace_WPF_Engine.csproj", "{745F9A84-96B1-4EEA-B247-EA85149B6355}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{745F9A84-96B1-4EEA-B247-EA85149B6355}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{745F9A84-96B1-4EEA-B247-EA85149B6355}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{745F9A84-96B1-4EEA-B247-EA85149B6355}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{745F9A84-96B1-4EEA-B247-EA85149B6355}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F119E287-6079-446B-9BF6-2732B816238D}
+	EndGlobalSection
+EndGlobal
