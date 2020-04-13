@@ -77,6 +77,9 @@ namespace LightSpace_WPF_Engine.Models.Utility
             return image;
         }
 
+        /// <summary>
+        /// Draws a rectangle based on given parameters. Rectangle includes base position coordinates as first x/y row/column. (Width 2 = 3 wide drawn box)
+        /// </summary>
         public static Bitmap DrawRectangle(this Bitmap image, Vector2 position, int width, int height, bool fill, int lineWeight, Color color)
         {
             var points = new List<Vector2>()

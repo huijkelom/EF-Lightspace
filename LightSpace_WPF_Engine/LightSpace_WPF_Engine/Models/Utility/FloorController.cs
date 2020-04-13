@@ -10,7 +10,7 @@ using LightSpace_WPF_Engine.Models.Models;
 
 namespace LightSpace_WPF_Engine.Models.Utility
 {
-    //TODO: Implement hardware reading and writing
+    //TODO: 00 Implement hardware reading and writing
     public sealed class FloorController
     {
         private static FloorController _instance;
@@ -21,7 +21,7 @@ namespace LightSpace_WPF_Engine.Models.Utility
 
         public static void ReadUsbData()
         {
-            //TODO: Read USB Data
+            //TODO: 00 Read USB Data
         }
 
         public static void WriteUsbData()
@@ -31,7 +31,7 @@ namespace LightSpace_WPF_Engine.Models.Utility
             //var tiles = imgSource.MapImageToTiles(Game.Get.TileManager.Tiles);
             //var alternatedTiles = DataTool.GetAlternatedTileList(tiles);
 
-            //TODO: Write USB Data
+            //TODO: 00 Write USB Data
         }
 
         public FloorController()
@@ -41,7 +41,7 @@ namespace LightSpace_WPF_Engine.Models.Utility
 
         public List<Tile> GetTiles()
         {
-            //TODO: Get tiles and return them here
+            //TODO: 04 Get tiles and return them here
             return null;
         }
 

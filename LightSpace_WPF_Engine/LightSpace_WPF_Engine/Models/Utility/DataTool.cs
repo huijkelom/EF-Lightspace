@@ -60,10 +60,10 @@ namespace LightSpace_WPF_Engine.Models.Utility
             return $"{colorVector.X}|{colorVector.Y}|{colorVector.Z}";
         }
 
-        //TODO: Test if this is the right sequencing for the final result. If not, tweaking should be simply
+        //TODO: 02 Test if this is the right sequencing for the final result. If not, tweaking should be simply
         // changing i to 1 to offset the changing once. Tile Lights might also have to be completely rotated
         // but that's a whole new story.
-        //TODO: Change lights and sensors as well.
+        //TODO: 02 Change lights and sensors as well.
         public static Tile[,] GetAlternatedTileList(Tile[,] tileInput)
         {
             var newTiles = tileInput;

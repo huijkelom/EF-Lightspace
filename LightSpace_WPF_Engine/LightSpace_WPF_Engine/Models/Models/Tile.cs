@@ -7,7 +7,7 @@ using LightSpace_WPF_Engine.Models.Utility;
 namespace LightSpace_WPF_Engine.Models.Models
 {
     [Serializable]
-    //TODO: Check out all cases to see if x & y of tile setting in 2D array are done right (x = column, y = row)
+    //TODO: 03 Check out all cases to see if x & y of tile setting in 2D array are done right (x = column, y = row)
     public class Tile
     {
         // Tile ID
@@ -48,29 +48,32 @@ namespace LightSpace_WPF_Engine.Models.Models
 
         public List<Light> GetLightsSurroundingSensor(Vector2 sensorPosition)
         {
-            var light1Pos = new Vector2(sensorPosition.X*2,sensorPosition.Y*2);
-            var light2Pos = new Vector2((sensorPosition.X * 2)+1, sensorPosition.Y * 2);
-            var light3Pos = new Vector2(sensorPosition.X * 2, (sensorPosition.Y * 2) + 1);
-            var light4Pos = new Vector2((sensorPosition.X * 2) + 1, (sensorPosition.Y * 2) + 1);
-
-            try
+            var positions = new List<Vector2>
             {
-                return new List<Light>()
+                new Vector2(sensorPosition.X * 2, sensorPosition.Y * 2),
+                new Vector2((sensorPosition.X * 2) + 1, sensorPosition.Y * 2),
+                new Vector2(sensorPosition.X * 2, (sensorPosition.Y * 2) + 1),
+                new Vector2((sensorPosition.X * 2) + 1, (sensorPosition.Y * 2) + 1)
+            };
+
+            var lights = new List<Light>();
+
+            for (var index = 0; index < 4; index++)
+            {
+                try
                 {
-                    Lights[light1Pos.X,light1Pos.Y],
-                    Lights[light2Pos.X,light2Pos.Y],
-                    Lights[light3Pos.X,light3Pos.Y],
-                    Lights[light4Pos.X,light4Pos.Y],
+                    lights.Add(Lights[positions[index].X,positions[index].Y]);
+                }
+                catch (IndexOutOfRangeException exception)
+                {
+                    ConsoleLogger.WriteToConsole(this,
+                        $"IndexOutOfRangeException trying to find light positions surrounding sensor position",
+                        exception);
+                    lights.Add(new Light(Vector2.Zero(), Vector3.Zero()));
+                }
+            }
 
-                };
-            }
-            catch (IndexOutOfRangeException exception)
-            {
-                ConsoleLogger.WriteToConsole(this,
-                    $"IndexOutOfRangeException trying to find light positions surrounding sensor position",
-                    exception);
-                return new List<Light>();
-            }
+            return lights;
         }
 
         public Sensor GetSensorsNextToLight(Vector2 lightPosition)
