@@ -9,7 +9,7 @@ using LightSpace_WPF_Engine.Models.Models;
 
 namespace LightSpace_WPF_Engine.Models.Utility
 {
-    //TODO: Make sure all instances of tiles being used use this specific instance
+    //TODO: 01 Make sure all instances of tiles being used use this specific instance
     public sealed class TileManager
     {
         public Tile[,] Tiles { get; private set; } = new Tile[0,0];
@@ -21,9 +21,10 @@ namespace LightSpace_WPF_Engine.Models.Utility
         /// <summary>
         /// Generates a X*Y tile set with X*Y lights and all X*Y sensors inactive.
         /// </summary>
-        public void GenerateDebugTiles()
+        public void GenerateDebugTiles(Vector2 size)
         {
-            Tiles = Tile.GetDebugTiles(5, 5, 8, 8, 4, 4,false);
+            //TODO: 10 Make something to set this per game (preferred floor size in game?)
+            Tiles = Tile.GetDebugTiles(size.X, size.Y, 8, 8, 4, 4,false);
         }
 
         public void SetRenderGraphic(Bitmap bitmap)

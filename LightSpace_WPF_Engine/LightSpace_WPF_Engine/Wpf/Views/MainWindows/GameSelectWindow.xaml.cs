@@ -44,11 +44,12 @@ namespace LightSpace_WPF_Engine.Wpf.Views.MainWindows
             {
                 var activeGameData = new ActiveGameData
                 {
-                    EnumValue         = gameName, 
-                    GameName          = gameName.ToString(),
-                    GameDescription   = GameList.GetGameDescription(gameName),
-                    GameIcon          = GameList.GetGameIcon(gameName),
-                    GameCustomControl = GameList.GetGameControls(gameName)
+                    EnumValue             = gameName, 
+                    GameName              = gameName.ToString(),
+                    GameDescription       = GameList.GetGameDescription(gameName),
+                    GameIcon              = GameList.GetGameIcon(gameName),
+                    GameCustomControl     = GameList.GetGameControls(gameName),
+                    PreferredGameTileSize = GameList.GetPreferredGameTileSize(gameName)
                 };
                 games.Add(activeGameData);
             }

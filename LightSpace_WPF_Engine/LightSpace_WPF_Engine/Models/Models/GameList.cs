@@ -35,6 +35,23 @@ namespace LightSpace_WPF_Engine.Models.Models
             }
         }
 
+        public static Vector2 GetPreferredGameTileSize(GameName gameName)
+        {
+            switch (gameName)
+            {
+                case GameName.None:
+                    return new Vector2(1, 1);
+                case GameName.Template:
+                    return new Vector2(1, 1);
+                case GameName.TestGame0:
+                    return new Vector2(2, 2);
+                case GameName.TestGame1:
+                    return new Vector2(1, 1);
+                default:
+                    return new Vector2(5,5);
+            }
+        }
+
         //TODO: Possibly load these in from a file. Not necessary though since it would still require a new build with the added games.
         public static string GetGameDescription(GameName gameName)
         {

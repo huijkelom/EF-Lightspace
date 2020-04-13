@@ -79,7 +79,6 @@ namespace LightSpace_WPF_Engine.Wpf.Views.UserControls.CustomControls
             {
                 Game.Get.CoreLoop.StopLoop();
             }
-            //TODO: Settings pop up
             // Settings: Framerate, speed of jump rope? min&max delay? 
             var game = Game.Get.RunningGameBehavior as SkippingRopeGame;
 

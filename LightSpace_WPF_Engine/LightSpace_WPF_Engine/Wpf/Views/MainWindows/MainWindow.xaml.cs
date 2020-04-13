@@ -57,8 +57,8 @@ namespace LightSpace_WPF_Engine.Wpf.Views.MainWindows
         {
             // init game
             Game.Get.Init();
-            //TODO: Remove debug tiles (when hardware testing starts)
-            Game.Get.TileManager.GenerateDebugTiles();
+            //TODO: 11 Remove debug tiles (when hardware testing starts)
+            Game.Get.TileManager.GenerateDebugTiles(Vector2.One());
 
             // set delegates
             RenderDelegate = Render;
@@ -101,6 +101,7 @@ namespace LightSpace_WPF_Engine.Wpf.Views.MainWindows
 
         public void LoadGame(ref ActiveGameData newGameData)
         {
+            Game.Get.TileManager.GenerateDebugTiles(newGameData.PreferredGameTileSize);
             gameData = newGameData;
             newGameData = null;
             this.Title = gameData.GameName;
@@ -262,7 +263,6 @@ namespace LightSpace_WPF_Engine.Wpf.Views.MainWindows
             Main.GetDispatcher.Invoke(PopulateCanvasControlDelegate, LeftViewContainer,
                 new List<CustomImage> {leftViewImage}, false);
 
-            //TODO: grab list of all tiles in middleview. Then repopulate ONLY sensor data in them.
             //var rightViewImage = new List
             var sensorTiles = new List<CustomImage>();
             foreach (UIElement child in MiddleViewContainer.Children)
@@ -276,7 +276,6 @@ namespace LightSpace_WPF_Engine.Wpf.Views.MainWindows
             foreach (var sensorTile in sensorTiles)
             {
                 var tileData = sensorTile.TileData;
-                //TODO: Check if i get the correct tile here
                 sensorTile.TileData.Sensors =
                     Game.Get.TileManager.Tiles[tileData.Position.X, tileData.Position.Y].Sensors;
             }

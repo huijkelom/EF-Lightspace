@@ -143,6 +143,7 @@
     <Compile Include="Models\Utility\PerformanceProfiler.cs" />
     <Compile Include="Models\Utility\RunningGameBehavior.cs" />
     <Compile Include="Models\Utility\SoundManager.cs" />
+    <Compile Include="Models\Utility\TileExtensions.cs" />
     <Compile Include="Models\Utility\TileManager.cs" />
     <Compile Include="Models\Utility\UiExtensions.cs" />
     <Compile Include="Models\Utility\Vector3.cs" />
@@ -289,6 +290,8 @@
     <Resource Include="Media\GameIcons\EmptyIcon.png" />
     <Resource Include="Media\AppResources\AppIcon2.ico" />
     <Resource Include="AppIcon2.ico" />
+    <Resource Include="Media\Testing\AppIcon.png" />
+    <Resource Include="Media\Testing\AppIcon2.png" />
     <Content Include="Media\Testing\ShortBeep.wav" />
   </ItemGroup>
   <ItemGroup>
