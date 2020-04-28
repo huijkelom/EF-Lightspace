@@ -326,8 +326,8 @@ namespace LightSpace_WPF_Engine.Wpf.Views.MainWindows
             }
             catch (Exception)
             {
-                // On application shutdown sometimes it will finish calling rendering functions while the application itself is already unavailable.
-                // This results in a NullReferenceException.
+                // On application shutdown sometimes it will finish calling rendering functions from the Loop thread while the application itself is already unavailable.
+                // This results in a NullReferenceException caught at this point.
             }
         }
     }

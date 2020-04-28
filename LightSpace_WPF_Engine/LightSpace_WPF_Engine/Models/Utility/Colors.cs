@@ -36,6 +36,15 @@ namespace LightSpace_WPF_Engine.Models.Utility
             }
         }
 
+        public static byte ColorX222ToByte(int r,int g, int b)
+        {
+            var byteString = "00";
+            byteString += ConvertValues(GetClosestColorValue(r)).ToString().PadLeft(2,'0');
+            byteString += ConvertValues(GetClosestColorValue(g)).ToString().PadLeft(2, '0');
+            byteString += ConvertValues(GetClosestColorValue(b)).ToString().PadLeft(2, '0');
+            return Convert.ToByte(byteString, 2);
+        }
+
         private static int ConvertValues(int input)
         {
             switch (input)

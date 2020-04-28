@@ -1,30 +1,18 @@
-﻿using LightSpace_WPF_Engine.Models.Enums;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using LightSpace_WPF_Engine.Models.Models;
+using LightSpace_WPF_Engine.Models.Utility.Hardware;
 
 namespace LightSpace_WPF_Engine.Models.Utility
 {
     //TODO: 00 Implement hardware reading and writing
-    public sealed class FloorController
+    public sealed class UsbFloorController : IHardwareController
     {
-        private static FloorController _instance;
-
-        public static FloorController Get => _instance ?? (_instance = new FloorController());
-
-        public List<Tile> GameTiles { get; private set; }
-
-        public static void ReadUsbData()
+        public void ReadData()
         {
             //TODO: 00 Read USB Data
         }
 
-        public static void WriteUsbData()
+        public void WriteData()
         {
             //Note: This code will throw an error and break the app currently. Once hardware is available to work with revise this to be done with delegates.
             //var imgSource = ImageExtensions.BitmapToImageSource(Game.Get.TileManager.GetRenderGraphic());
@@ -34,20 +22,10 @@ namespace LightSpace_WPF_Engine.Models.Utility
             //TODO: 00 Write USB Data
         }
 
-        public FloorController()
-        {
-            GameTiles = GetTiles();
-        }
-
         public List<Tile> GetTiles()
         {
             //TODO: 04 Get tiles and return them here
             return null;
-        }
-
-        public void SetFloorLights()
-        {
-            
         }
     }
 }

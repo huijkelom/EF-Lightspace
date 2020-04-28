@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using LightSpace_WPF_Engine.Models.Models;
+using LightSpace_WPF_Engine.Models.Utility.Hardware;
 
 namespace LightSpace_WPF_Engine.Models.Utility
 {
@@ -15,6 +16,7 @@ namespace LightSpace_WPF_Engine.Models.Utility
         public Tile[,] Tiles { get; private set; } = new Tile[0,0];
         private Bitmap gameRender;
         public bool RenderChanged { get; set; }
+        public IHardwareController HardwareController = new UsbFloorController();
 
         private readonly object lockObject = new object();
 
@@ -57,7 +59,8 @@ namespace LightSpace_WPF_Engine.Models.Utility
 
         public void ReloadTiles(int width, int height)
         {
-            var tempTileList = FloorController.Get.GetTiles();
+            HardwareController.ReadData();
+            var tempTileList = new List<Tile>();
             var tileArray = new Tile[height, width];
             var columnIndex = 0;
             var rowIndex = 0;

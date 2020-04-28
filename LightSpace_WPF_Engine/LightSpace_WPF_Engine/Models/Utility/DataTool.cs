@@ -29,6 +29,106 @@ namespace LightSpace_WPF_Engine.Models.Utility
             return byteString;
         }
 
+        /// <summary>
+        /// Set data values from given byte array.
+        /// </summary>
+        /// <param name="bytes"> Byte array containing tile group and 32 pairs of bytes, one pair for 32 tiles in a group.</param>
+        public static List<OutputData> ByteArrayToOutputData(byte[] bytes)
+        {
+            var outputList = new List<OutputData>();
+            //TODO: 00 Test if this method is functional
+            var tileGroup = BitConverter.ToInt16(new[] { bytes[0], bytes[1] }, 0); //bytes[0] | bytes[1] << 8; bitwise code
+            for (var tile = 2; tile < 33; tile += 2)
+            {
+                // Make a single binary list from the 2 bytes.
+                var sensorData = ByteToBinary(bytes[tile]);
+                sensorData += ByteToBinary(bytes[tile + 1]);
+                // Separate the string value into separate integer values.
+                var datalist = new int[sensorData.Length];
+                for (var index = 0; index < sensorData.Length; index++)
+                {
+                    datalist[index] = Convert.ToInt32(sensorData.Substring(index, 1));
+                }
+
+                #region type 1 : reversing certain areas of the data, comment out if unneeded.
+                // The first iteration reverses number 4 to 7 so 4&7 will swap and 5&6 will swap
+                var min = 4;
+                var max = 6;
+                for (var i = min; i < max; i++)
+                {
+                    var temp = datalist[max];
+                    datalist[max] = datalist[min];
+                    datalist[min] = temp;
+                }
+
+                // The first iteration reverses number 12 to 15 so 12&15 will swap and 13&14 will swap
+                min = 12;
+                max = 15;
+                for (var i = min; i < max; i++)
+                {
+                    var temp = datalist[max];
+                    datalist[max] = datalist[min];
+                    datalist[min] = temp;
+                }
+                #endregion
+
+                // Loop through data and add an OutputData object to the list for every piece of data.
+                var xIndex = 0;
+                var yIndex = 0;
+                foreach (var data in datalist)
+                {
+                    xIndex++;
+                    if (xIndex > 3)
+                    {
+                        xIndex = 0;
+                        yIndex++;
+                    }
+                    outputList.Add(new OutputData()
+                    {
+                        PressureDetected = (data != 0),
+                        TileNumber = Convert.ToInt16(tileGroup + tile/2),
+                        Position = new Vector2(xIndex,yIndex)
+                    });
+                }
+            }
+            return outputList;
+        }
+
+        /// <summary>
+        /// Set DataArray value to an array of bytes created from the given objects.
+        /// </summary>
+        /// <param name="tileNumberBits"> Tile number as needed by hardware. </param>
+        /// <param name="colors"> 64 separate bytes giving a color of every led on the tile. </param>
+        /// <returns> Returns byte array containing the given parameters ready to send colors to specified hardware tile. </returns>
+        public static byte[] InputDataToByteArray(int tileNumberBits, Color[,] colors)
+        {
+            //TODO: 00 Test if this method is functional
+            // create a byte array sized 66 bytes long
+            var bytes = new byte[2 + (colors.GetLength(0) * colors.GetLength(1))];
+            #region First 2 bytes : Tile Number
+            // Convert tile number to a binary string with Format 2 (Binary)
+            var binaryTileNumberString = Convert.ToString(tileNumberBits, 2);
+            // Pad the binary string to fit 2 bytes and convert it to byte array
+            binaryTileNumberString = binaryTileNumberString.PadLeft(16, '0');
+            bytes = Encoding.ASCII.GetBytes(binaryTileNumberString);
+            #endregion
+
+            #region Last 64 bytes : 1 byte per Light (8*8 lights)
+            var index = 0;
+            // Loop through the colors and add the color bytes to the byte array
+            for (var x = 0; x < colors.GetLength(0); x++)
+            {
+                for (var y = 0; y < colors.GetLength(1); y++)
+                {
+                    bytes[index] = Colors.ColorX222ToByte(colors[x, y].R, colors[x, y].G, colors[x, y].B);
+                    index++;
+                }
+            }
+            #endregion
+
+            return bytes;
+        }
+
         public static string ByteToBinary(byte b)
         {
             return Convert.ToString(b, 2).PadLeft(8, '0');
