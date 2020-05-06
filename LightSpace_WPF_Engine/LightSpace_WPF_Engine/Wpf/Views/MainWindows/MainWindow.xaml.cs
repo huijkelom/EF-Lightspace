@@ -68,7 +68,7 @@ namespace LightSpace_WPF_Engine.Wpf.Views.MainWindows
             RenderOptions.SetBitmapScalingMode(LeftViewContainer, BitmapScalingMode.NearestNeighbor);
             RenderOptions.SetBitmapScalingMode(MiddleViewContainer, BitmapScalingMode.NearestNeighbor);
 
-            SoundManager = new SoundManager();
+            SoundManager = new SoundManager(.5d); //TODO: 50 volume control
             CustomConsole = new CustomConsole();
             ConsoleListBox.ItemsSource = CustomConsole.ConsoleMessages;
 
@@ -109,7 +109,8 @@ namespace LightSpace_WPF_Engine.Wpf.Views.MainWindows
             this.Icon =  ImageExtensions.BitmapToImageSource(gameData.GameIcon);
             CustomControlArea.Content = gameData.GameCustomControl;
             SetStartButton(gameData.EnumValue);
-
+            ClearCanvas(LeftViewContainer);
+            ClearCanvas(MiddleViewContainer);
             Game.Get.SetRunningGameBehavior(GameList.GetGameBehavior(gameData.EnumValue));
         }
 
@@ -287,6 +288,13 @@ namespace LightSpace_WPF_Engine.Wpf.Views.MainWindows
             LeftViewContainer.Refresh();
             MiddleViewContainer.Refresh();
             this.Refresh();
+        }
+
+        private static void ClearCanvas(Canvas canvas)
+        {
+            canvas.Children.Clear();
+            canvas.RenderSize = new System.Windows.Size(canvas.Width, canvas.Height);
+            canvas.Background = (SolidColorBrush)Application.Current.Resources["LightSpaceGray"];
         }
 
         private static void PopulateCanvas(Canvas canvas, List<CustomImage> images, bool needsExtraRoom)

@@ -15,9 +15,9 @@ namespace LightSpace_WPF_Engine.Models.Utility
         //TODO: 40 Refine the entire sound playing system. 
         // > multiple sound volume settings in a library (string id+value)
         // > keep track of all threads/mediaplayers so their settings can be changed (volume, pausing, deletion)
-        public SoundManager()
+        public SoundManager(double soundVolume)
         {
-            SoundVolume = 0.5d;
+            SoundVolume = soundVolume;
         }
 
         /// <summary>

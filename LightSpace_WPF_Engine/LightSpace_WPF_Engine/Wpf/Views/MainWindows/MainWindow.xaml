@@ -71,7 +71,7 @@
 
                 <WrapPanel Width="385" Grid.Column="0" Grid.Row="0">
                     <!--<Button Name="LeftViewLoadButton" Content="Load" Click="LeftViewLoadButton_Click" />-->
-                    <Label Content="Left View" Margin="10,6,0,0"/>
+                    <Label Content="Game pixel view" Margin="10,6,0,0"/>
                 </WrapPanel>
                 <Border Margin="3,3,3,3" Grid.Column="0" Grid.Row="1">
                     <Viewbox Stretch="Uniform">
@@ -81,7 +81,7 @@
 
                 <WrapPanel Width="385" Grid.Column="1" Grid.Row="0">
                     <!--<Button Name="MiddleViewLoadButton" Content="Load" Click="MiddleViewLoadButton_Click"/>-->
-                    <Label Content="Middle View" Margin="10,6,0,0"/>
+                    <Label Content="Hardware state view" Margin="10,6,0,0"/>
                 <!--<Button Name="MiddleViewZoomInButton" Tag="false"  Content="+" Padding="0" Height="20" Width="20" Margin="5" Click="MiddleViewSizeChange"/>
                     <Button Name="MiddleViewZoomOutButton" Tag="true" Content="-" Padding="0" Height="20" Width="20" Margin="5" Click="MiddleViewSizeChange"/>-->
                 </WrapPanel>
@@ -113,6 +113,7 @@
 
         <GroupBox Header="Diagnostics" Name="DiagnosticsGroupBox" Background="{DynamicResource MaterialDesignPaper}" Grid.Column="5" Grid.Row="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
 
-        <GroupBox Header="Audio" Name="AudioGroupBox" Background="{DynamicResource MaterialDesignPaper}" Grid.Column="5" Grid.Row="4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+        <GroupBox Header="Audio" Name="AudioGroupBox" Background="{DynamicResource MaterialDesignPaper}" Grid.Column="5" Grid.Row="4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        </GroupBox>
     </Grid>
 </Window>

@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using LightSpace_WPF_Engine.Wpf.Views.MainWindows;
 
 namespace LightSpace_WPF_Engine.Wpf.Views.UserControls
 {
@@ -24,7 +25,12 @@ namespace LightSpace_WPF_Engine.Wpf.Views.UserControls
         {
             InitializeComponent();
             //TODO: 41 Add control bars for volume. Needs to wait for audio update.
-            // might be handy: https://stackoverflow.com/questions/20823614/capture-progressbar-value-onmouseclick
+            
+        }
+
+        private void OnValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            MainWindow.Main.SoundManager.SoundVolume = e.NewValue;
         }
     }
 }

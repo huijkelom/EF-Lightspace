@@ -33,7 +33,7 @@ namespace LightSpace_WPF_Engine.Models.Utility
             lock (LockObject)
             {
                 var outputData = new OutputData();
-                outputData.SetDataFromByteArray(bytes);
+                //outputData.SetDataFromByteArray(bytes);
                 OutputDataInputs.Add(outputData);
             }
         }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace LightSpace_WPF_Engine.Models.Utility
 {
-    public class CoreBehavior
+    public abstract class CoreBehavior
     {
         private delegate void OnUpdateEvent();
         private readonly OnUpdateEvent onUpdateEvent;
@@ -16,7 +16,7 @@ namespace LightSpace_WPF_Engine.Models.Utility
         private delegate void OnDestroyEvent();
         private readonly OnDestroyEvent onDestroyEvent;
 
-        public CoreBehavior()
+        protected CoreBehavior()
         {
             BehaviorManager.Get.AddBehavior(this);
             Start();

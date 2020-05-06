@@ -16,7 +16,7 @@ namespace LightSpace_WPF_Engine.Models.Utility
         public Tile[,] Tiles { get; private set; } = new Tile[0,0];
         private Bitmap gameRender;
         public bool RenderChanged { get; set; }
-        public IHardwareController HardwareController = new UsbFloorController();
+        public HardwareController HardwareController = new UsbFloorController();
 
         private readonly object lockObject = new object();
 
@@ -59,7 +59,7 @@ namespace LightSpace_WPF_Engine.Models.Utility
 
         public void ReloadTiles(int width, int height)
         {
-            HardwareController.ReadData();
+            Game.Get.TileManager.HardwareController.Write.Invoke();
             var tempTileList = new List<Tile>();
             var tileArray = new Tile[height, width];
             var columnIndex = 0;

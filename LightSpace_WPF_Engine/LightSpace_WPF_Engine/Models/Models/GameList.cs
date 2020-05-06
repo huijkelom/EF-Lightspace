@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -52,7 +52,7 @@ namespace LightSpace_WPF_Engine.Models.Models
             }
         }
 
-        //TODO: Possibly load these in from a file. Not necessary though since it would still require a new build with the added games.
+        //TODO: 50 Possibly load these in from a file. Not necessary though since it would still require a new build with the added games.
         public static string GetGameDescription(GameName gameName)
         {
             switch (gameName)
