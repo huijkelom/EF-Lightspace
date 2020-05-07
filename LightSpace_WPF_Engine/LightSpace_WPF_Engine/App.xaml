@@ -15,19 +15,6 @@
             <!-- Background color brushes -->
             <SolidColorBrush x:Key="LightSpaceGray" Color="#FF292929"/>
             <SolidColorBrush x:Key="LightSpaceGray_Dark" Color="#FF1a1a1a"/>
-
-            <!-- custom theme primary color
-            <SolidColorBrush x:Key="PrimaryHueLightBrush" Color="#744CE0"/>
-            <SolidColorBrush x:Key="PrimaryHueLightForegroundBrush" Color="#FFFFFF"/>
-            <SolidColorBrush x:Key="PrimaryHueMidBrush" Color="#803309"/>
-            <SolidColorBrush x:Key="PrimaryHueMidForegroundBrush" Color="#FFFFFF"/>
-            <SolidColorBrush x:Key="PrimaryHueDarkBrush" Color="#4D1DCF"/>
-            <SolidColorBrush x:Key="PrimaryHueDarkForegroundBrush" Color="#FFFFFF"/>
-            custom theme accent color 
-            <SolidColorBrush x:Key="SecondaryAccentBrush" Color="#5C5B5E"/>
-            <SolidColorBrush x:Key="SecondaryAccentForegroundBrush" Color="#FFFFFF"/>
-            -->
-               
         </ResourceDictionary>
     </Application.Resources>
 </Application>

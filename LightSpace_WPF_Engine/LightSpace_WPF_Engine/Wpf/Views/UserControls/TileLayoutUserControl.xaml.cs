@@ -87,7 +87,7 @@ namespace LightSpace_WPF_Engine.Wpf.Views.UserControls
                 for (var tileY = 0; tileY < tiles.GetLength(1); tileY++)
                 {
                     var tile = tiles[tileX, tileY];
-                    tile.TileId = (tileX * tiles.GetLength(1)) + tileY;
+                    tile.TileId = (short)((tileX * tiles.GetLength(1)) + tileY);
                     var customImage = ImageExtensions.GetIndividualSensorVisual(tile,true);
 
                     customImage.TileData = tile;

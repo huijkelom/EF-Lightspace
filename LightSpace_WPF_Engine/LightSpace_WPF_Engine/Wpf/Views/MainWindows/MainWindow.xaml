@@ -66,11 +66,10 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
-
                 </Grid.ColumnDefinitions>
 
                 <WrapPanel Width="385" Grid.Column="0" Grid.Row="0">
-                    <!--<Button Name="LeftViewLoadButton" Content="Load" Click="LeftViewLoadButton_Click" />-->
+                    <Button Name="LeftViewToggleButton" Content="Hide" Click="ToggleRenderGame_Click" Visibility="Hidden"/>
                     <Label Content="Game pixel view" Margin="10,6,0,0"/>
                 </WrapPanel>
                 <Border Margin="3,3,3,3" Grid.Column="0" Grid.Row="1">
@@ -80,29 +79,14 @@
                 </Border>
 
                 <WrapPanel Width="385" Grid.Column="1" Grid.Row="0">
-                    <!--<Button Name="MiddleViewLoadButton" Content="Load" Click="MiddleViewLoadButton_Click"/>-->
+                    <Button Name="MiddleViewToggleButton" Content="Hide" Click="ToggleRenderTiles_Click"/>
                     <Label Content="Hardware state view" Margin="10,6,0,0"/>
-                <!--<Button Name="MiddleViewZoomInButton" Tag="false"  Content="+" Padding="0" Height="20" Width="20" Margin="5" Click="MiddleViewSizeChange"/>
-                    <Button Name="MiddleViewZoomOutButton" Tag="true" Content="-" Padding="0" Height="20" Width="20" Margin="5" Click="MiddleViewSizeChange"/>-->
                 </WrapPanel>
                 <Border Margin="3,3,3,3" Grid.Column="1" Grid.Row="1">
                     <Viewbox Stretch="Uniform">
                         <Canvas Name="MiddleViewContainer" Height="0" Width="0" />
                     </Viewbox>
                 </Border>
-                <!-- This comment block is the tile layout select code
-                <WrapPanel Width="385" Grid.Column="2" Grid.Row="0">
-                    <Button Name="RightViewLoadButton" Content="Load" Click="RightViewLoadButton_Click"/>
-                    <Label Content="Right View" Margin="10,6,0,0"/>
-                    <Button Name="RightViewZoomInButton" Content="+" Padding="0" Height="20" Width="20" Margin="5"/>
-                    <Button Name="RightViewZoomOutButton" Content="-" Padding="0" Height="20" Width="20" Margin="5"/>
-                </WrapPanel>
-                <Border Margin="3,3,3,3" Grid.Column="2" Grid.Row="1">
-                    <Viewbox Name="RightControlViewViewBox" Stretch="UniformToFill">
-
-                    </Viewbox>
-                </Border>
-                -->
             </Grid>
         </GroupBox>
 

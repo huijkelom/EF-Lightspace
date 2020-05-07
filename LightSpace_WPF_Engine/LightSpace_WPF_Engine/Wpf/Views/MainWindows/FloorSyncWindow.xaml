@@ -1,0 +1,28 @@
+﻿<Window x:Class="LightSpace_WPF_Engine.Wpf.Views.MainWindows.FloorSyncWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LightSpace_WPF_Engine.Wpf.Views.MainWindows"
+        mc:Ignorable="d"
+        Title="FloorSyncWindow" Height="450" Width="800"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        Background="{StaticResource LightSpaceGray}"
+        Closing="Window_Closing"
+        WindowStyle="None"
+>
+    <Grid>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="*" MinHeight="50"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Name="ToolbarStackPanel" Height="50" Orientation="Horizontal" Grid.Row="0"/>
+        <StackPanel Name="DrawingStackPanel" Grid.Row="1" Background="Black"/>
+
+    </Grid>
+</Window>

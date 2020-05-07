@@ -41,7 +41,7 @@ namespace LightSpace_WPF_Engine.Games.TestGame
             // set ticks per second the core game loop makes, as well as retrieve the tiles measured
             Game.Get.CoreLoop.TicksPerSecond = TicksPerSecond;
             var tiles = Game.Get.TileManager.Tiles;
-            GameFieldTileSize = new Vector2(tiles.GetLength(0), tiles.GetLength(1));
+            GameFieldTileSize = Game.Get.TileManager.FieldSize;
 
             lightAmount = Game.Get.TileManager.GetLightAmount();
             sensorAmount = Game.Get.TileManager.GetSensorAmount();

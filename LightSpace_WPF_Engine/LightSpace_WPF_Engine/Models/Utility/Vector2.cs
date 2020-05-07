@@ -69,5 +69,10 @@ namespace LightSpace_WPF_Engine.Models.Utility
         {
             return new Vector2(1, 1);
         }
+
+        public override string ToString()
+        {
+            return $"{X} * {Y}";
+        }
     }
 }

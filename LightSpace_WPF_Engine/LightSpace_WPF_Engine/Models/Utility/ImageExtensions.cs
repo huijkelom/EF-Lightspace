@@ -462,7 +462,7 @@ namespace LightSpace_WPF_Engine.Models.Utility
             }
         }
 
-        public static BitmapImage BitmapToImageSource(Bitmap bitmap)
+        public static BitmapImage BitmapToImageSource(this Bitmap bitmap)
         {
             using (MemoryStream memory = new MemoryStream())
             {

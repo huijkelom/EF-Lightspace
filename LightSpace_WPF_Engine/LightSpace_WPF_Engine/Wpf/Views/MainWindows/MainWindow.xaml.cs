@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
-using System.IO;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Threading;
-using LightSpace_WPF_Engine.Games.TestGame;
 using LightSpace_WPF_Engine.Models.Enums;
 using LightSpace_WPF_Engine.Models.Models;
 using LightSpace_WPF_Engine.Models.Models.Logging;
@@ -16,8 +12,6 @@ using LightSpace_WPF_Engine.Models.Utility;
 using LightSpace_WPF_Engine.Wpf.Controls;
 using LightSpace_WPF_Engine.Wpf.ViewModels;
 using LightSpace_WPF_Engine.Wpf.Views.UserControls;
-using Colors = LightSpace_WPF_Engine.Models.Utility.Colors;
-using Image = System.Windows.Controls.Image;
 
 namespace LightSpace_WPF_Engine.Wpf.Views.MainWindows
 {
@@ -40,6 +34,8 @@ namespace LightSpace_WPF_Engine.Wpf.Views.MainWindows
         public RenderEvent RenderDelegate;
 
         private ActiveGameData gameData;
+        private bool renderTiles = true;
+        private bool renderGame = true;
 
         public MainWindow()
         {
@@ -57,8 +53,6 @@ namespace LightSpace_WPF_Engine.Wpf.Views.MainWindows
         {
             // init game
             Game.Get.Init();
-            //TODO: 11 Remove debug tiles (when hardware testing starts)
-            Game.Get.TileManager.GenerateDebugTiles(Vector2.One());
 
             // set delegates
             RenderDelegate = Render;
@@ -88,29 +82,52 @@ namespace LightSpace_WPF_Engine.Wpf.Views.MainWindows
             SetStartButton(gameName);
         }
 
-        private void SetStartButton(GameName gameName)
+        private bool SetStartButton(GameName gameName)
         {
+            var value = true;
             if (gameName == GameName.None || gameName == GameName.Template)
             {
-                ToggleGameButton.IsEnabled = false;
-                return;
+                value = false;
+            }
+            else if (Game.Get.TileManager.FieldSize.X == 0 || Game.Get.TileManager.FieldSize.Y == 0)
+            {
+                value = false;
             }
 
-            ToggleGameButton.IsEnabled = true;
+            LeftViewToggleButton.IsEnabled = value;
+            MiddleViewToggleButton.IsEnabled = value;
+            ToggleGameButton.IsEnabled = value;
+            return value;
+        }
+
+        public void RefreshGame()
+        {
+            if (gameData == null)
+            {
+                return;
+            }
+            // Prevent LoadGame logic from double interacting with the same variable and clearing it.
+            var copy = gameData;
+            LoadGame(ref copy);
         }
 
         public void LoadGame(ref ActiveGameData newGameData)
         {
-            Game.Get.TileManager.GenerateDebugTiles(newGameData.PreferredGameTileSize);
             gameData = newGameData;
             newGameData = null;
             this.Title = gameData.GameName;
             DescriptionTextBlock.Text = gameData.GameDescription;
-            this.Icon =  ImageExtensions.BitmapToImageSource(gameData.GameIcon);
-            CustomControlArea.Content = gameData.GameCustomControl;
-            SetStartButton(gameData.EnumValue);
+            DescriptionTextBlock.Text += $"{Environment.NewLine}{Environment.NewLine}Preferred tile size: {gameData.PreferredGameTileSize} ";
+            this.Icon = gameData.GameIcon.BitmapToImageSource();
             ClearCanvas(LeftViewContainer);
             ClearCanvas(MiddleViewContainer);
+
+            // If Game is not allowed to start anyway, don't add the behavior or controls.
+            if (!SetStartButton(gameData.EnumValue))
+            {
+                return;
+            }
+            CustomControlArea.Content = gameData.GameCustomControl;
             Game.Get.SetRunningGameBehavior(GameList.GetGameBehavior(gameData.EnumValue));
         }
 
@@ -119,10 +136,8 @@ namespace LightSpace_WPF_Engine.Wpf.Views.MainWindows
         /// </summary>
         private void SyncFloor_Click(object sender, RoutedEventArgs e)
         {
-            // Dev testing Method loading in test data into the registered inputs
-            MessageBox.Show($"This button has no current use since hardware is not currently being tested or integrated. {Environment.NewLine}" +
-                            $"To change how the tiles load go change the parameters in GenerateDebugTiles() in TileManager.", "Sync Floor Info");
-
+            var floorSyncWindow = new FloorSyncWindow();
+            floorSyncWindow.ShowDialog();
         }
 
         private void ChooseGame_Click(object sender, RoutedEventArgs e)
@@ -138,8 +153,11 @@ namespace LightSpace_WPF_Engine.Wpf.Views.MainWindows
         private void ToggleGame_Click(object sender, RoutedEventArgs e)
         {
             Game.Get.ToggleLoop();
-            ChooseGameButton.IsEnabled = !Game.Get.CoreLoop.IsRunning;
-            SyncFloorButton.IsEnabled = !Game.Get.CoreLoop.IsRunning;
+            var isRunning = Game.Get.CoreLoop.IsRunning;
+            ChooseGameButton.IsEnabled = !isRunning;
+            SyncFloorButton.IsEnabled = !isRunning;
+            LeftViewToggleButton.IsEnabled = !isRunning;
+            MiddleViewToggleButton.IsEnabled = !isRunning;
         }
 
         /// <summary>
@@ -158,96 +176,17 @@ namespace LightSpace_WPF_Engine.Wpf.Views.MainWindows
             ConsoleGroupBox.Header = $"Console ({ConsoleListBox.Items.Count})";
         }
 
-        #region previously used debug code, currently unused
-        private void LeftViewLoadButton_Click(object sender, RoutedEventArgs e)
+        private void ToggleRenderTiles_Click(object sender, RoutedEventArgs e)
         {
-            #region drawing extension functions test
-
-            var img = ImageExtensions.BuildImage(Game.Get.TileManager.Tiles);
-            img.DrawLine(new Vector2(10, 10), new Vector2(20, 15), 1, Colors.Blue());
-
-            img.DrawRectangle(new Vector2(18, 18), 5, 7, false, 1, Colors.MediumPurple());
-            img.DrawRectangle(new Vector2(14, 13), 2, 4, true, 1, Colors.HotPink());
-
-            img.DrawCircle(new Vector2(25, 25), 5, false, 1, Colors.Black());
-            img.DrawCircle(new Vector2(25, 10), 5, true, 1, Colors.White());
-
-            var polygonPoints1 = new List<Vector2>() { new Vector2(10, 1), new Vector2(10, 30), new Vector2(30, 3) };
-            var polygonPoints2 = new List<Vector2>() { new Vector2(4, 4), new Vector2(4, 7), new Vector2(7, 7) };
-            img.DrawPolygon(polygonPoints1, false, 1, Colors.BrightBlue());
-            img.DrawPolygon(polygonPoints2, true, 1, Colors.Green());
-
-            img.DrawText(new Vector2(12, 20), "1", 15, Colors.Red());
-
-            var bitmapImage = ImageExtensions.GetBitmapFromPath("Media/Testing/TestDrawnImage2.png");
-            img.DrawImage(new Vector2(3, 20), bitmapImage);
-
-            #endregion
-
-            //img.Save("image.png",ImageFormat.Png);
-            //Variable used to load the image in online so it can be copied and checked using https://codebeautify.org/base64-to-image-converter.
-            //var strval = Convert.ToBase64String(ImageExtensions.ToByteArray(img)); 
-            //LeftViewContainer.Source = ImageExtensions.BitmapToImageSource(img);
-            var controlImage = new CustomImage
-            {
-                Source = ImageExtensions.BitmapToImageSource(img)
-            };
-            Main.GetDispatcher.Invoke(PopulateCanvasControlDelegate, LeftViewContainer, new List<CustomImage> { controlImage }, false);
+            renderTiles = !renderTiles;
+            MiddleViewToggleButton.Content = renderTiles ? "Hide" : "Show";
         }
 
-        private void MiddleViewLoadButton_Click(object sender, RoutedEventArgs e)
+        private void ToggleRenderGame_Click(object sender, RoutedEventArgs e)
         {
-            var size = VisualTreeHelper.GetContentBounds(LeftViewContainer.Children[0]);
-            ImageSource src = ImageExtensions.BitmapToImageSource(
-                ImageExtensions.CanvasToBitmap(LeftViewContainer, true, Convert.ToInt32(size.Width), Convert.ToInt32(size.Height))
-                );
-            var newtiles = src.MapImageToTiles(Game.Get.TileManager.Tiles);
-
-            #region first moveable test
-            /*var image = ImageExtensions.ConstructSensorDataBackground(Tile.GetDebugTiles(2, 8, 8, 8, 4, 4));
-            var img = new CustomImage
-            {
-                Source = ImageExtensions.BitmapToImageSource(image)
-            };
-            img.SetValue(DraggableExtender.CanDragProperty, true);
-
-            var secondImage = ImageExtensions.BuildImage(Tile.GetDebugTiles(6, 6, 8, 8, 4, 4));
-            var secondImg = new CustomImage
-            {
-                Source = ImageExtensions.BitmapToImageSource(secondImage)
-            };
-            secondImg.SetValue(DraggableExtender.CanDragProperty, true);*/
-            #endregion
-
-            var imgList = ImageExtensions.GetIndividualSensorVisuals(Game.Get.TileManager.Tiles);
-            Main.GetDispatcher.Invoke(PopulateCanvasControlDelegate, MiddleViewContainer, imgList, true);
+            renderGame = !renderGame;
+            LeftViewToggleButton.Content = renderGame ? "Hide" : "Show";
         }
-
-        // For scaling the images within the middle canvas. Functionality  currently disabled.
-        private void MiddleViewSizeChange(object sender, RoutedEventArgs e)
-        {
-            var expand = ((Button) sender).Tag;
-            if (expand.ToString() == "true")
-            {
-                MiddleViewContainer.Width *= 1.2;
-                MiddleViewContainer.Height *= 1.2;
-            }
-            else
-            {
-                // reducing scale by ~ same amount as the upscale 1.2 is
-                MiddleViewContainer.Width *= 0.8335;
-                MiddleViewContainer.Height *= 0.8335;
-            }
-            MiddleViewContainer.ClipToBounds = true;
-        }
-
-        private void RightViewLoadButton_Click(object sender, RoutedEventArgs e)
-        {
-            /*RightControlViewViewBox.Child = new TileLayoutUserControl();
-            var tileLayoutControl = RightControlViewViewBox.Child as TileLayoutUserControl;
-            tileLayoutControl.PopulateControl(Game.Get.TileManager.Tiles);*/
-        }
-        #endregion
 
         /// <summary>
         /// Forces a refresh on controls specified within the method.
@@ -260,29 +199,42 @@ namespace LightSpace_WPF_Engine.Wpf.Views.MainWindows
                 return;
             }
 
-            var leftViewImage = new CustomImage(Game.Get.TileManager.GetRenderGraphic());
-            Main.GetDispatcher.Invoke(PopulateCanvasControlDelegate, LeftViewContainer,
-                new List<CustomImage> {leftViewImage}, false);
-
-            //var rightViewImage = new List
-            var sensorTiles = new List<CustomImage>();
-            foreach (UIElement child in MiddleViewContainer.Children)
+            if (renderGame)
             {
-                if (child is CustomImage temp)
+                var leftViewImage = new CustomImage(Game.Get.TileManager.GetRenderGraphic());
+                Main.GetDispatcher.Invoke(PopulateCanvasControlDelegate, LeftViewContainer,
+                    new List<CustomImage> { leftViewImage }, false);
+            }
+            else
+            {
+                ClearCanvas(LeftViewContainer);
+            }
+
+            if (renderTiles)
+            {
+                var sensorTiles = new List<CustomImage>();
+                foreach (UIElement child in MiddleViewContainer.Children)
                 {
-                    sensorTiles.Add(temp);
+                    if (child is CustomImage temp)
+                    {
+                        sensorTiles.Add(temp);
+                    }
                 }
-            }
 
-            foreach (var sensorTile in sensorTiles)
+                foreach (var sensorTile in sensorTiles)
+                {
+                    var tileData = sensorTile.TileData;
+                    sensorTile.TileData.Sensors =
+                        Game.Get.TileManager.Tiles[tileData.Position.X, tileData.Position.Y].Sensors;
+                }
+
+                var updatedSensorImages = ImageExtensions.GetIndividualSensorVisuals(Game.Get.TileManager.Tiles);
+                PopulateCanvas(MiddleViewContainer, updatedSensorImages, false);
+            }
+            else
             {
-                var tileData = sensorTile.TileData;
-                sensorTile.TileData.Sensors =
-                    Game.Get.TileManager.Tiles[tileData.Position.X, tileData.Position.Y].Sensors;
+                ClearCanvas(MiddleViewContainer);
             }
-
-            var updatedSensorImages = ImageExtensions.GetIndividualSensorVisuals(Game.Get.TileManager.Tiles);
-            PopulateCanvas(MiddleViewContainer, updatedSensorImages, false);
 
             // Force Refresh elements
             LeftViewContainer.Refresh();

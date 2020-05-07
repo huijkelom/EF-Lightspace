@@ -11,18 +11,18 @@ namespace LightSpace_WPF_Engine.Models.Models
     public class Tile
     {
         // Tile ID
-        public int TileId { get; set; }
+        public short TileId { get; set; }
 
         // Position of the tile on a grid.
-        public Vector2 Position { get; set; }
+        public Vector2 Position { get; set; } = Vector2.Zero();
 
         // Should be 64 in total. (8*8)
-        public Light[,] Lights { get; set; }
+        public Light[,] Lights { get; set; } = new Light[0,0];
 
         // Should be 16 in total. (4*4)
-        public Sensor[,] Sensors { get; set; }
+        public Sensor[,] Sensors { get; set; } = new Sensor[0,0];
 
-        public Tile(int tileId)
+        public Tile(short tileId)
         {
             TileId = tileId;
             Init();
@@ -121,8 +121,8 @@ namespace LightSpace_WPF_Engine.Models.Models
             {
                 for (var tileY = 0; tileY < tiles.GetLength(1); tileY++)
                 {
-                    var tileId = (tileX * tileSizeX) + tileY;
-                    tiles[tileX, tileY] = new Tile(tileX + tileY)
+                    var tileId = (short)((tileX * tileSizeX) + tileY);
+                    tiles[tileX, tileY] = new Tile(tileId)
                     {
                         TileId = tileId,
                         Position = new Vector2(tileX,tileY),

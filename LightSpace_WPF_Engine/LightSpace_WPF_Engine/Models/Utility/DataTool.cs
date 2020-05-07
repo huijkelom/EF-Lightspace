@@ -100,7 +100,7 @@ namespace LightSpace_WPF_Engine.Models.Utility
         /// <param name="tileNumberBits"> Tile number as needed by hardware. </param>
         /// <param name="colors"> 64 separate bytes giving a color of every led on the tile. </param>
         /// <returns> Returns byte array containing the given parameters ready to send colors to specified hardware tile. </returns>
-        public static byte[] InputDataToByteArray(int tileNumberBits, Color[,] colors)
+        public static byte[] InputDataToByteArray(short tileNumberBits, Color[,] colors)
         {
             //TODO: 00 Test if this method is functional
             // create a byte array sized 66 bytes long

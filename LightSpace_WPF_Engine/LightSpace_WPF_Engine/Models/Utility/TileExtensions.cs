@@ -18,6 +18,19 @@ namespace LightSpace_WPF_Engine.Models.Utility
             return sensors.Any(sensor => sensor.PressureDetected = true);
         }
 
+        public static List<Tile> ToList(this Tile[,] tiles)
+        {
+            var list = new List<Tile>();
+            for (var x = 0; x < tiles.GetLength(0); x++)
+            {
+                for (var y = 0; y < tiles.GetLength(1); y++)
+                {
+                    list.Add(tiles[x,y]);
+                }
+            }
+            return list;
+        }
+
         public static bool AnyActiveSensorsInTile(this Tile tile)
         {
             for (var x = 0; x < tile.Sensors.GetLength(0); x++)

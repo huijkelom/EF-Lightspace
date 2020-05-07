@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Interop;
 using System.Windows.Media;
 using LightSpace_WPF_Engine.Models.Models;
 using LightSpace_WPF_Engine.Models.Utility.Hardware;
@@ -16,9 +17,15 @@ namespace LightSpace_WPF_Engine.Models.Utility
         public Tile[,] Tiles { get; private set; } = new Tile[0,0];
         private Bitmap gameRender;
         public bool RenderChanged { get; set; }
-        public HardwareController HardwareController = new UsbFloorController();
-
+        public BaseHardwareController BaseHardwareController;
+        public bool UseSimulatedTiles = false;
+        public Vector2 FieldSize = Vector2.Zero();
         private readonly object lockObject = new object();
+
+        public TileManager()
+        {
+            BaseHardwareController = new UsbFloorController(this);
+        }
 
         /// <summary>
         /// Generates a X*Y tile set with X*Y lights and all X*Y sensors inactive.
@@ -27,6 +34,7 @@ namespace LightSpace_WPF_Engine.Models.Utility
         {
             //TODO: 10 Make something to set this per game (preferred floor size in game?)
             Tiles = Tile.GetDebugTiles(size.X, size.Y, 8, 8, 4, 4,false);
+            BaseHardwareController.NoHardwareMode = true;
         }
 
         public void SetRenderGraphic(Bitmap bitmap)
@@ -35,6 +43,7 @@ namespace LightSpace_WPF_Engine.Models.Utility
             {
                 gameRender = bitmap;
                 RenderChanged = true;
+                Tiles = bitmap.BitmapToImageSource().MapImageToTiles(Tiles);
             }
         }
 
@@ -49,35 +58,20 @@ namespace LightSpace_WPF_Engine.Models.Utility
 
         public int GetLightAmount()
         {
+            if (Tiles.GetLength(0) == 0 || Tiles.GetLength(1) == 0)
+            {
+                return 0;
+            }
             return Tiles[0, 0].Lights.GetLength(0);
         }
 
         public int GetSensorAmount()
         {
-            return Tiles[0, 0].Sensors.GetLength(0);
-        }
-
-        public void ReloadTiles(int width, int height)
-        {
-            Game.Get.TileManager.HardwareController.Write.Invoke();
-            var tempTileList = new List<Tile>();
-            var tileArray = new Tile[height, width];
-            var columnIndex = 0;
-            var rowIndex = 0;
-            foreach (var tile in tempTileList)
+            if (Tiles.GetLength(0) == 0 || Tiles.GetLength(1) == 0)
             {
-                tileArray[columnIndex, rowIndex] = tile;
-                rowIndex++;
-
-                if (rowIndex > height - 1)
-                {
-                    rowIndex = 0;
-                    columnIndex++;
-                }
+                return 0;
             }
-
-            // Alternate tiles so the grid follows the snaked line of the hardware
-            Tiles = DataTool.GetAlternatedTileList(tileArray);
+            return Tiles[0, 0].Sensors.GetLength(0);
         }
     }
 }
