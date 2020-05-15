@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,26 +16,53 @@ namespace LightSpace_WPF_Engine.Models.Utility
     public sealed class TileManager
     {
         public Tile[,] Tiles { get; private set; } = new Tile[0,0];
+
+        public delegate void SetRenderChangedDelegate( bool renderChanged);
+
+        public SetRenderChangedDelegate SetRenderChangedEvent;
+
+        public delegate bool GetRenderChangedDelegate();
+
+        public GetRenderChangedDelegate GetRenderChangedEvent;
+
         private Bitmap gameRender;
-        public bool RenderChanged { get; set; }
-        public BaseHardwareController BaseHardwareController;
+        public BaseHardwareController HardwareController;
         public bool UseSimulatedTiles = false;
         public Vector2 FieldSize = Vector2.Zero();
         private readonly object lockObject = new object();
+        private bool renderChanged;
+
 
         public TileManager()
         {
-            BaseHardwareController = new UsbFloorController(this);
+            HardwareController = new UsbFloorController(this);
+            SetRenderChangedEvent += SetRenderChanged;
+            GetRenderChangedEvent += GetRenderChanged;
         }
 
         /// <summary>
         /// Generates a X*Y tile set with X*Y lights and all X*Y sensors inactive.
         /// </summary>
-        public void GenerateDebugTiles(Vector2 size)
+        public void GenerateDebugTiles(Vector2 size, bool noHardware)
         {
-            //TODO: 10 Make something to set this per game (preferred floor size in game?)
             Tiles = Tile.GetDebugTiles(size.X, size.Y, 8, 8, 4, 4,false);
-            BaseHardwareController.NoHardwareMode = true;
+            HardwareController.NoHardwareMode = noHardware;
+        }
+
+        public void SetRenderChanged(bool newRenderChanged)
+        {
+            lock (lockObject)
+            {
+                renderChanged = newRenderChanged;
+            }
+        }
+
+        public bool GetRenderChanged()
+        {
+            lock (lockObject)
+            {
+                return renderChanged;
+            }
         }
 
         public void SetRenderGraphic(Bitmap bitmap)
@@ -42,8 +70,10 @@ namespace LightSpace_WPF_Engine.Models.Utility
             lock (lockObject)
             {
                 gameRender = bitmap;
-                RenderChanged = true;
-                Tiles = bitmap.BitmapToImageSource().MapImageToTiles(Tiles);
+                SetRenderChanged(true);
+                var bitmapImageSource = bitmap.BitmapToImageSource();
+                var tempTiles = bitmapImageSource.MapImageToTiles(Tiles);
+                Tiles = tempTiles;
             }
         }
 
@@ -51,7 +81,6 @@ namespace LightSpace_WPF_Engine.Models.Utility
         {
             lock (lockObject)
             {
-                RenderChanged = false;
                 return gameRender;
             }
         }
@@ -60,7 +89,7 @@ namespace LightSpace_WPF_Engine.Models.Utility
         {
             if (Tiles.GetLength(0) == 0 || Tiles.GetLength(1) == 0)
             {
-                return 0;
+                return 8;
             }
             return Tiles[0, 0].Lights.GetLength(0);
         }
@@ -69,7 +98,7 @@ namespace LightSpace_WPF_Engine.Models.Utility
         {
             if (Tiles.GetLength(0) == 0 || Tiles.GetLength(1) == 0)
             {
-                return 0;
+                return 8;
             }
             return Tiles[0, 0].Sensors.GetLength(0);
         }

@@ -320,7 +320,8 @@ namespace LightSpace_WPF_Engine.Models.Utility
                 return tiles;
             }
 
-            // Lock the bitmaps bits.  
+            #region the -i dont get it- way
+            /*// Lock the bitmaps bits.  
 
             var rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
             var bmpData = bmp.LockBits(rect, ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
@@ -342,14 +343,36 @@ namespace LightSpace_WPF_Engine.Models.Utility
             {
                 for (var row = 0; row < bmpData.Width; row++)
                 {
-                    var b = (byte) (rgbValues[(column * stride) + (row * 3)]);
+                    var b = (byte)(rgbValues[(column * stride) + (row * 3)]);
                     var g = (byte)(rgbValues[(column * stride) + (row * 3) + 1]);
                     var r = (byte)(rgbValues[(column * stride) + (row * 3) + 2]);
                     tiles = SetColor(tiles, column, row, new Vector3(r, g, b));
                 }
             }
 
+            return tiles;*/
+            #endregion
+
+            #region the less performant way
+
+            for (var xTile = 0; xTile < tiles.GetLength(0); xTile++)
+            {
+                for (var yTile = 0; yTile < tiles.GetLength(1); yTile++)
+                {
+                    for (var xLight = 0; xLight < lightAmount; xLight++)
+                    {
+                        for (var yLight = 0; yLight < lightAmount; yLight++)
+                        {
+                            var pixel = bmp.GetPixel((xTile * lightAmount) + xLight, (yTile * lightAmount) + yLight);
+                            tiles[xTile, yTile].Lights[xLight, yLight].SetColor(pixel.R, pixel.G, pixel.B);
+                        }
+                    }
+                }
+            }
+
             return tiles;
+
+            #endregion
         }
 
         public static Tile[,] SetColor(Tile[,] tiles, int column, int row, Vector3 color)

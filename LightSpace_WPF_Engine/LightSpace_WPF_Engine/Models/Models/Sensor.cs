@@ -16,5 +16,10 @@ public class Sensor
             PressureDetected = pressureDetected;
             Position = position;
         }
+
+        public override string ToString()
+        {
+            return $"Sensor pos {Position}, on:{PressureDetected}";
+        }
     }
 }

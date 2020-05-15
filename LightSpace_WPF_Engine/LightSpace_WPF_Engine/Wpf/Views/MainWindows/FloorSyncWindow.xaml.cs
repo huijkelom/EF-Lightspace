@@ -55,7 +55,7 @@ namespace LightSpace_WPF_Engine.Wpf.Views.MainWindows
                 Margin = new Thickness(10, 9, 5, 9),
                 Content = "X"
             };
-            closeBtn.Click += (o, args) => Close();
+            closeBtn.Click += (o, args) => CloseWindow();
             ToolbarStackPanel.Children.Add(closeBtn);
             #endregion
 
@@ -112,6 +112,15 @@ namespace LightSpace_WPF_Engine.Wpf.Views.MainWindows
             #endregion
         }
 
+        private void CloseWindow()
+        {
+            SetFieldSize();
+            Game.Get.TileManager.UseSimulatedTiles = false;
+            Game.Get.TileManager.GenerateDebugTiles(fieldSize,false);
+            MainWindow.Main.RefreshGame();
+            Close();
+        }
+
         private void Window_Closing(object sender, CancelEventArgs e)
         {
             if (!isClosing)
@@ -133,7 +142,7 @@ namespace LightSpace_WPF_Engine.Wpf.Views.MainWindows
         {
             SetFieldSize();
             Game.Get.TileManager.UseSimulatedTiles = true;
-            Game.Get.TileManager.GenerateDebugTiles(fieldSize);
+            Game.Get.TileManager.GenerateDebugTiles(fieldSize,true);
             MainWindow.Main.RefreshGame();
             Close();
         }

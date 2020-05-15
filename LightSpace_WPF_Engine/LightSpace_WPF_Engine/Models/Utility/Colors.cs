@@ -26,23 +26,45 @@ namespace LightSpace_WPF_Engine.Models.Utility
 
         public static Color VectorToColor(Vector3 vector, bool convert = true)
         {
+            //TODO: Color not set properly.
             if (convert)
             {
-                return Color.FromArgb(ConvertValues(vector.X), ConvertValues(vector.Y), ConvertValues(vector.Z));
+                return Color.FromArgb(
+                    ConvertValues(vector.X), 
+                    ConvertValues(vector.Y), 
+                    ConvertValues(vector.Z));
             }
             else
             {
-                return Color.FromArgb(vector.X, vector.Y, vector.Z);
+                return Color.FromArgb(
+                    vector.X, 
+                    vector.Y, 
+                    vector.Z);
             }
         }
 
         public static byte ColorX222ToByte(int r,int g, int b)
         {
             var byteString = "00";
-            byteString += ConvertValues(GetClosestColorValue(r)).ToString().PadLeft(2,'0');
-            byteString += ConvertValues(GetClosestColorValue(g)).ToString().PadLeft(2, '0');
-            byteString += ConvertValues(GetClosestColorValue(b)).ToString().PadLeft(2, '0');
+            byteString += Color2ToString(b);
+            byteString += Color2ToString(g);
+            byteString += Color2ToString(r);
             return Convert.ToByte(byteString, 2);
+        }
+
+        private static string Color2ToString(int val)
+        {
+            switch (val)
+            {
+                case 1:
+                    return "01";
+                case 2:
+                    return "10";
+                case 3:
+                    return "11";
+                default:
+                    return "00";
+            }
         }
 
         private static int ConvertValues(int input)
@@ -70,10 +92,11 @@ namespace LightSpace_WPF_Engine.Models.Utility
 
         private static int GetClosestColorValue(int input)
         {
-            var array = new int[4] {0, 85, 170, 255};
+            var array = new [] {0, 85, 170, 255};
             try
             {
-                return Convert.ToInt32(array.Min(x => Math.Abs((long) x - input)));
+                var val = Convert.ToInt32(array.Min(x => Math.Abs((long)x - input)));
+                return val;
             }
             catch (Exception exception)
             {

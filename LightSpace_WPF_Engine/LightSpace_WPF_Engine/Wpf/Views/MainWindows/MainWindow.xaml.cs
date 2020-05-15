@@ -89,7 +89,7 @@ namespace LightSpace_WPF_Engine.Wpf.Views.MainWindows
             {
                 value = false;
             }
-            else if (Game.Get.TileManager.FieldSize.X == 0 || Game.Get.TileManager.FieldSize.Y == 0)
+            else if ((Game.Get.TileManager.FieldSize.X == 0 || Game.Get.TileManager.FieldSize.Y == 0) && Game.Get.TileManager.UseSimulatedTiles)
             {
                 value = false;
             }
@@ -194,7 +194,7 @@ namespace LightSpace_WPF_Engine.Wpf.Views.MainWindows
         public void Render()
         {
             // only render if changes were found
-            if (!Game.Get.TileManager.RenderChanged)
+            if (!Game.Get.TileManager.GetRenderChanged())
             {
                 return;
             }

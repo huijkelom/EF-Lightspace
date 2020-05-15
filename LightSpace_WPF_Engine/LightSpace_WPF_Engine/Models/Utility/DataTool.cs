@@ -106,11 +106,9 @@ namespace LightSpace_WPF_Engine.Models.Utility
             // create a byte array sized 66 bytes long
             var bytes = new byte[2 + (colors.GetLength(0) * colors.GetLength(1))];
             #region First 2 bytes : Tile Number
-            // Convert tile number to a binary string with Format 2 (Binary)
-            var binaryTileNumberString = Convert.ToString(tileNumberBits, 2);
-            // Pad the binary string to fit 2 bytes and convert it to byte array
-            binaryTileNumberString = binaryTileNumberString.PadLeft(16, '0');
-            bytes = Encoding.ASCII.GetBytes(binaryTileNumberString);
+
+            bytes[0] = (byte) (0xFF & int.Parse(tileNumberBits.ToString()));
+            bytes[1] = (byte) (0xFF & (int.Parse(tileNumberBits.ToString()) >> 8));
             #endregion
 
             #region Last 64 bytes : 1 byte per Light (8*8 lights)

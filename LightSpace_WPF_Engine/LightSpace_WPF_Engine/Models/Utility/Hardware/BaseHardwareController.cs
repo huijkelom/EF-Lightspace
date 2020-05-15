@@ -16,7 +16,6 @@
             TileManager = tileManager;
             Read += ReadData;
             Write += WriteData;
-            NoHardwareMode = false;
         }
 
         protected abstract void WriteData();

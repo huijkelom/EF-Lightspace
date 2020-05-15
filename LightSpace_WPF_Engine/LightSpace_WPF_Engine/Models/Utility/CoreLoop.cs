@@ -79,7 +79,7 @@ namespace LightSpace_WPF_Engine.Models.Utility
                     // Do logic events as fast as the set FrameRate
                     if (currentTick >= nextGameTick || UnrestrictedTickSpeed)
                     {
-                        MainWindow.Main.GetDispatcher.BeginInvoke(Game.Get.TileManager.BaseHardwareController.Read);
+                        MainWindow.Main.GetDispatcher.BeginInvoke(Game.Get.TileManager.HardwareController.Read);
                         Time.SetDeltaTime(stopwatch.ElapsedMilliseconds);
                         // Handle input received from hardware or engine source
                         BehaviorManager.Get.RunEvent(Enums.EventState.Update);
@@ -93,10 +93,12 @@ namespace LightSpace_WPF_Engine.Models.Utility
                         var inputs = Input.GetOutputData(true);
                         if (inputs.Count > 0)
                         {
-                            ConsoleLogger.WriteToUiConsole("", $"Inputs received : {inputs.Count}", true);
+                            //ConsoleLogger.WriteToUiConsole("", $"Inputs received : {inputs.Count}", true);
                         }
                         stopwatch.Restart();
-                        MainWindow.Main.GetDispatcher.BeginInvoke(Game.Get.TileManager.BaseHardwareController.Write);
+                        MainWindow.Main.GetDispatcher.BeginInvoke(Game.Get.TileManager.HardwareController.Write);
+                        //TODO: Set RenderChanged to false;
+                        //MainWindow.Main.GetDispatcher.BeginInvoke(Game.Get.TileManager.SetRenderChangedEvent,false);
                     }
                 }
             }

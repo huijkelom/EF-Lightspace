@@ -18,7 +18,7 @@ namespace LightSpace_WPF_Engine.Games.TestGame
         public double ProgressDelay { get; set; } = .05;
         public double JumpDelayMin { get; set; } = .3;
         public double JumpDelayMax { get; set; } = 2;
-        private const int TicksPerSecond = 75;
+        private const int TicksPerSecond = 10;
 
         #region Gameplay Variables
 
@@ -42,7 +42,8 @@ namespace LightSpace_WPF_Engine.Games.TestGame
             Game.Get.CoreLoop.TicksPerSecond = TicksPerSecond;
             var tiles = Game.Get.TileManager.Tiles;
             GameFieldTileSize = Game.Get.TileManager.FieldSize;
-
+            GameFieldTileSize =
+                GameFieldTileSize.X == 0 || GameFieldTileSize.Y == 0 ? Vector2.One() : GameFieldTileSize;
             lightAmount = Game.Get.TileManager.GetLightAmount();
             sensorAmount = Game.Get.TileManager.GetSensorAmount();
             GameName = GameName.TestGame0;

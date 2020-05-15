@@ -38,5 +38,10 @@ namespace LightSpace_WPF_Engine.Models.Utility
         {
             return new Vector3(1,1,1);
         }
+
+        public override string ToString()
+        {
+            return $"{X}|{Y}|{Z}";
+        }
     }
 }

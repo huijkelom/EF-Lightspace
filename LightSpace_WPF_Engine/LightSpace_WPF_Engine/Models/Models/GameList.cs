@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
+using LightSpace_WPF_Engine.Games.FullColorTest;
 using LightSpace_WPF_Engine.Games.TestGame;
 using LightSpace_WPF_Engine.Wpf.views.UserControls;
 using LightSpace_WPF_Engine.Models.Enums;
@@ -29,7 +30,7 @@ namespace LightSpace_WPF_Engine.Models.Models
                 case GameName.TestGame0:
                     return new TestGameControl();
                 case GameName.TestGame1:
-                    return null;
+                    return new NoneGameControl();
                 default:
                     throw new InvalidGameException();
             }
@@ -64,7 +65,7 @@ namespace LightSpace_WPF_Engine.Models.Models
                 case GameName.TestGame0:
                     return "Currently loaded is Test Game (0), which is used as a development tool to test functionality.";
                 case GameName.TestGame1:
-                    return "";
+                    return "Sets all tiles to a single color to test if connection works.";
                 default:
                     throw new InvalidGameException();
             }
@@ -102,18 +103,10 @@ namespace LightSpace_WPF_Engine.Models.Models
                 case GameName.TestGame0:
                     return new SkippingRopeGame();
                 case GameName.TestGame1:
-                    return new RunningGameBehavior();
+                    return new FullColorGame();
                 default:
                     return new RunningGameBehavior();
             }
-        }
-
-        private static Uri GetUri(string partialPath)
-        {
-            // Get full path from the given partial path
-            var path = Path.GetFullPath(partialPath);
-            // Remove 2 runtime folder names to get to actual file location and convert to Uri
-            return new Uri(path.Replace("\\bin\\Debug", ""));
         }
     }
 }

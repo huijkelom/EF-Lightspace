@@ -72,7 +72,7 @@ namespace LightSpace_WPF_Engine.Models.Utility
 
         public override string ToString()
         {
-            return $"{X} * {Y}";
+            return $"{X}|{Y}";
         }
     }
 }

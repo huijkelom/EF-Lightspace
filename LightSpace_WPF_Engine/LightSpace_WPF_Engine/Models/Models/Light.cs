@@ -24,5 +24,10 @@ namespace LightSpace_WPF_Engine.Models.Models
         {
             this.Color = new Vector3(r, g, b);
         }
+
+        public override string ToString()
+        {
+            return $"Sensor pos {Position}, color:{Color}";
+        }
     }
 }

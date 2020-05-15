@@ -43,7 +43,7 @@ namespace LightSpace_WPF_Engine.Models.Utility
             lock (LockObject)
             {
                 OutputDataInputs.Add(outputData);
-                Game.Get.TileManager.RenderChanged = true;
+                Game.Get.TileManager.SetRenderChangedEvent.Invoke(true);
             }
         }
 
