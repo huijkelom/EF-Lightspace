@@ -33,65 +33,25 @@ namespace LightSpace_WPF_Engine.Models.Utility
         /// Set data values from given byte array.
         /// </summary>
         /// <param name="bytes"> Byte array containing tile group and 32 pairs of bytes, one pair for 32 tiles in a group.</param>
-        public static List<OutputData> ByteArrayToOutputData(byte[] bytes)
+        public static Dictionary<short, bool[]> ToOutputDictionary(this byte[] bytes)
         {
-            var outputList = new List<OutputData>();
-            //TODO: 00 Test if this method is functional
-            var tileGroup = BitConverter.ToInt16(new[] { bytes[0], bytes[1] }, 0); //bytes[0] | bytes[1] << 8; bitwise code
+            var dictionary = new Dictionary<short, bool[]>();
             for (var tile = 2; tile < 33; tile += 2)
             {
                 // Make a single binary list from the 2 bytes.
                 var sensorData = ByteToBinary(bytes[tile]);
                 sensorData += ByteToBinary(bytes[tile + 1]);
                 // Separate the string value into separate integer values.
-                var datalist = new int[sensorData.Length];
+                var datalist = new bool[sensorData.Length];
                 for (var index = 0; index < sensorData.Length; index++)
                 {
-                    datalist[index] = Convert.ToInt32(sensorData.Substring(index, 1));
+                    datalist[index] = sensorData.Substring(index, 1) == "1" ? true : false;
                 }
-
-                #region type 1 : reversing certain areas of the data, comment out if unneeded.
-                // The first iteration reverses number 4 to 7 so 4&7 will swap and 5&6 will swap
-                var min = 4;
-                var max = 6;
-                for (var i = min; i < max; i++)
-                {
-                    var temp = datalist[max];
-                    datalist[max] = datalist[min];
-                    datalist[min] = temp;
-                }
-
-                // The first iteration reverses number 12 to 15 so 12&15 will swap and 13&14 will swap
-                min = 12;
-                max = 15;
-                for (var i = min; i < max; i++)
-                {
-                    var temp = datalist[max];
-                    datalist[max] = datalist[min];
-                    datalist[min] = temp;
-                }
-                #endregion
-
-                // Loop through data and add an OutputData object to the list for every piece of data.
-                var xIndex = 0;
-                var yIndex = 0;
-                foreach (var data in datalist)
-                {
-                    xIndex++;
-                    if (xIndex > 3)
-                    {
-                        xIndex = 0;
-                        yIndex++;
-                    }
-                    outputList.Add(new OutputData()
-                    {
-                        PressureDetected = (data != 0),
-                        TileNumber = Convert.ToInt16(tileGroup + tile/2),
-                        Position = new Vector2(xIndex,yIndex)
-                    });
-                }
+                var tileNumber = ((tile / 2) - 1);
+                dictionary.Add(Convert.ToInt16(tileNumber > 0 && tileNumber < 16 ? tileNumber : 0), datalist);
+                continue;
             }
-            return outputList;
+            return dictionary;
         }
 
         /// <summary>
@@ -102,17 +62,16 @@ namespace LightSpace_WPF_Engine.Models.Utility
         /// <returns> Returns byte array containing the given parameters ready to send colors to specified hardware tile. </returns>
         public static byte[] InputDataToByteArray(short tileNumberBits, Color[,] colors)
         {
-            //TODO: 00 Test if this method is functional
             // create a byte array sized 66 bytes long
             var bytes = new byte[2 + (colors.GetLength(0) * colors.GetLength(1))];
             #region First 2 bytes : Tile Number
 
-            bytes[0] = (byte) (0xFF & int.Parse(tileNumberBits.ToString()));
-            bytes[1] = (byte) (0xFF & (int.Parse(tileNumberBits.ToString()) >> 8));
+            bytes[0] = (byte)(0xFF & int.Parse(tileNumberBits.ToString()));
+            bytes[1] = (byte)(0xFF & (int.Parse(tileNumberBits.ToString()) >> 8));
             #endregion
 
             #region Last 64 bytes : 1 byte per Light (8*8 lights)
-            var index = 0;
+            var index = 2;
             // Loop through the colors and add the color bytes to the byte array
             for (var x = 0; x < colors.GetLength(0); x++)
             {
@@ -148,7 +107,7 @@ namespace LightSpace_WPF_Engine.Models.Utility
             {
                 return Convert.ToString(s + t).PadLeft(8, '0');
             }
-            ConsoleLogger.WriteToConsole(s+t, 
+            ConsoleLogger.WriteToConsole(s + t,
                 $"Error combining strings specified values:{s} and :{t} to binary. Length > 8.");
             return s;
         }
@@ -162,10 +121,10 @@ namespace LightSpace_WPF_Engine.Models.Utility
         // changing i to 1 to offset the changing once. Tile Lights might also have to be completely rotated
         // but that's a whole new story.
         //TODO: 02 Change lights and sensors as well.
-        public static Tile[,] GetAlternatedTileList(Tile[,] tileInput)
+        public static Tile[,] GetAlternatedTileList(this Tile[,] tileInput)
         {
             var newTiles = tileInput;
-            for (var i = 0; i < newTiles.GetLength(0); i+=2)
+            for (var i = 0; i < newTiles.GetLength(0); i += 2)
             {
                 var length1 = newTiles.GetLength(1);
                 for (var j = 0; j < length1 / 2; j++)
@@ -173,15 +132,67 @@ namespace LightSpace_WPF_Engine.Models.Utility
                     var temp = newTiles[i, j];
                     newTiles[i, j] = newTiles[i, length1 - j - 1];
                     newTiles[i, length1 - j - 1] = temp;
+
+                    // change the lights and sensors too
+                    newTiles[i, j].FixInnerTile();
+                    newTiles[i, length1 - j - 1].FixInnerTile();
                 }
             }
             return newTiles;
         }
 
+        /// <summary>
+        /// Swap the rows of the lights and sensors of the tile. 
+        /// </summary>
+        /// <param name="tile"> Tile that will have its array rows swapped.</param>
+        private static void FixInnerTile(this Tile tile)
+        {
+            // swap all the rows (X)
+            for (var i = 0; i < tile.Lights.GetLength(0) / 2; i++)
+            {
+                // make the array
+                var tempLightList = new Light[tile.Lights.GetLength(0)];
+                for (var j = 0; j < tile.Lights.GetLength(0); j++)
+                {
+                    // fill the array
+                    tempLightList[j] = tile.Lights[i, j];
+                }
+
+                for (var j = 0; j < tile.Lights.GetLength(0); j++)
+                {
+                    // fill the second array taken from the back
+                    var tempLight = tile.Lights[tile.Lights.GetLength(0) - i - 1, j];
+                    // overwrite 
+                    tile.Lights[tile.Lights.GetLength(0) - i - 1, j] = tempLightList[j];
+                    tile.Lights[i, j] = tempLight;
+                }
+            }
+
+            for (var i = 0; i < tile.Sensors.GetLength(0) / 2; i++)
+            {
+                // make the array
+                var tempSensorList = new Sensor[tile.Sensors.GetLength(0)];
+                for (var j = 0; j < tile.Sensors.GetLength(0); j++)
+                {
+                    // fill the array
+                    tempSensorList[j] = tile.Sensors[i, j];
+                }
+
+                for (var j = 0; j < tile.Sensors.GetLength(0); j++)
+                {
+                    // swap the value from the first array with the second value
+                    var tempSensor = tile.Sensors[tile.Sensors.GetLength(0) - i - 1, j];
+                    // overwrite 
+                    tile.Sensors[tile.Sensors.GetLength(0) - i - 1, j] = tempSensorList[j];
+                    tile.Sensors[i, j] = tempSensor;
+                }
+            }
+        }
+
         public static Bitmap Rgb888To4Bpp(Bitmap image)
         {
             var newImage = image.Clone(
-                new Rectangle(0, 0, image.Width, image.Height), 
+                new Rectangle(0, 0, image.Width, image.Height),
                 PixelFormat.Format4bppIndexed
                 );
             //new Bitmap(image.Width,image.Height, PixelFormat.Format4bppIndexed);
@@ -192,9 +203,9 @@ namespace LightSpace_WPF_Engine.Models.Utility
         {
             var returnValue = Vector3.Zero();
 
-            returnValue.X = ShrinkByteData(color.R, 5,8);
-            returnValue.Y = ShrinkByteData(color.G, 6,8);
-            returnValue.Z = ShrinkByteData(color.B, 5,8);
+            returnValue.X = ShrinkByteData(color.R, 5, 8);
+            returnValue.Y = ShrinkByteData(color.G, 6, 8);
+            returnValue.Z = ShrinkByteData(color.B, 5, 8);
 
             return returnValue;
         }
@@ -214,14 +225,14 @@ namespace LightSpace_WPF_Engine.Models.Utility
         {
             var returnValue = Vector3.Zero();
 
-            returnValue.X = GrowByteData(colorVector.X, 8,5);
-            returnValue.Y = GrowByteData(colorVector.Y, 8,6);
-            returnValue.Z = GrowByteData(colorVector.Z, 8,5);
+            returnValue.X = GrowByteData(colorVector.X, 8, 5);
+            returnValue.Y = GrowByteData(colorVector.Y, 8, 6);
+            returnValue.Z = GrowByteData(colorVector.Z, 8, 5);
 
             return Color.FromArgb(returnValue.X, returnValue.Y, returnValue.Z);
         }
 
-        public static int ShrinkByteData(int value, int bitSize , int currentSize)
+        public static int ShrinkByteData(int value, int bitSize, int currentSize)
         {
             var factorIndex = currentSize - bitSize;
             var factor = GetFactor(factorIndex);
@@ -232,7 +243,7 @@ namespace LightSpace_WPF_Engine.Models.Utility
         public static int GrowByteData(int value, int bitSize, int currentSize)
         {
             var factorIndex = bitSize - currentSize;
-            var factor= GetFactor(factorIndex);
+            var factor = GetFactor(factorIndex);
 
             return (int)Math.Floor(Convert.ToDecimal(value * factor));
         }

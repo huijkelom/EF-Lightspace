@@ -89,7 +89,7 @@ namespace LightSpace_WPF_Engine.Wpf.Views.MainWindows
             {
                 value = false;
             }
-            else if ((Game.Get.TileManager.FieldSize.X == 0 || Game.Get.TileManager.FieldSize.Y == 0) && Game.Get.TileManager.UseSimulatedTiles)
+            else if ((Game.Get.TileManager.FieldSize.X == 0 || Game.Get.TileManager.FieldSize.Y == 0) && Game.Get.TileManager.HardwareController.NoHardwareMode)
             {
                 value = false;
             }
@@ -148,7 +148,7 @@ namespace LightSpace_WPF_Engine.Wpf.Views.MainWindows
         }
 
         /// <summary>
-        /// Toggles the core game loop of the game. TODO: Actually select a game instead of always starting SkippingRomeGame.
+        /// Toggles the core game loop of the game.
         /// </summary>
         private void ToggleGame_Click(object sender, RoutedEventArgs e)
         {

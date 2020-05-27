@@ -27,7 +27,6 @@ namespace LightSpace_WPF_Engine.Models.Utility
 
         private Bitmap gameRender;
         public BaseHardwareController HardwareController;
-        public bool UseSimulatedTiles = false;
         public Vector2 FieldSize = Vector2.Zero();
         private readonly object lockObject = new object();
         private bool renderChanged;

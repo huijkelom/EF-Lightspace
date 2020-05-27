@@ -115,7 +115,6 @@ namespace LightSpace_WPF_Engine.Wpf.Views.MainWindows
         private void CloseWindow()
         {
             SetFieldSize();
-            Game.Get.TileManager.UseSimulatedTiles = false;
             Game.Get.TileManager.GenerateDebugTiles(fieldSize,false);
             MainWindow.Main.RefreshGame();
             Close();
@@ -141,7 +140,6 @@ namespace LightSpace_WPF_Engine.Wpf.Views.MainWindows
         private void SimulateHardwareBtn_OnClick(object sender, RoutedEventArgs e)
         {
             SetFieldSize();
-            Game.Get.TileManager.UseSimulatedTiles = true;
             Game.Get.TileManager.GenerateDebugTiles(fieldSize,true);
             MainWindow.Main.RefreshGame();
             Close();

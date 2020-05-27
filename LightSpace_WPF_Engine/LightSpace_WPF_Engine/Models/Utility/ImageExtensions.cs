@@ -304,6 +304,10 @@ namespace LightSpace_WPF_Engine.Models.Utility
 
         public static Tile[,] MapImageToTiles(this ImageSource image, Tile[,] tiles)
         {
+            if(tiles.GetLength(0) == 0 || tiles.GetLength(1) == 0)
+            {
+                return tiles;
+            }
             var lightAmount = tiles[0, 0].Lights.GetLength(0);
             var xTileSize = lightAmount * tiles.GetLength(0);
             var yTileSize = lightAmount * tiles.GetLength(1);

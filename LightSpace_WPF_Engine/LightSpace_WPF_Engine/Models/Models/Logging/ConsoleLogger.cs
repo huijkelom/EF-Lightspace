@@ -26,6 +26,8 @@ namespace LightSpace_WPF_Engine.Models.Models.Logging
 
         private static StreamWriter _streamWriter;
 
+        private static object _lock = new object();
+
         static ConsoleLogger()
         {
             if (LogFilePath == "")
@@ -36,7 +38,6 @@ namespace LightSpace_WPF_Engine.Models.Models.Logging
 
         public static void Init()
         {
-            
             Console.Title = $"LightSpace_Engine v.{GetPublishedVersion()} [Technical console window]";
         }
 
@@ -63,14 +64,17 @@ namespace LightSpace_WPF_Engine.Models.Models.Logging
 
         private static void WriteConsoleToFile(string logText)
         {
-            _fileStream = new FileStream(LogFilePath, FileMode.Append);
-            _streamWriter = new StreamWriter(_fileStream);
+            lock (_lock)
+            {
+                _fileStream = new FileStream(LogFilePath, FileMode.Append);
+                _streamWriter = new StreamWriter(_fileStream);
 
-            _streamWriter.WriteLine(logText);
+                _streamWriter.WriteLine(logText);
 
-            _streamWriter.Flush();
-            _streamWriter.Close();
-            _fileStream.Close();
+                _streamWriter.Flush();
+                _streamWriter.Close();
+                _fileStream.Close();
+            }
         }
 
         private static string GetFullFilePath()
