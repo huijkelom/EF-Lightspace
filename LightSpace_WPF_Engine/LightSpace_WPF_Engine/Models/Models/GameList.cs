@@ -14,6 +14,7 @@ using LightSpace_WPF_Engine.Models.Enums;
 using LightSpace_WPF_Engine.Models.Exceptions;
 using LightSpace_WPF_Engine.Models.Utility;
 using LightSpace_WPF_Engine.Wpf.Views.UserControls.CustomControls;
+using LightSpace_WPF_Engine.Games.BasePressureTest;
 
 namespace LightSpace_WPF_Engine.Models.Models
 {
@@ -31,6 +32,8 @@ namespace LightSpace_WPF_Engine.Models.Models
                     return new TestGameControl();
                 case GameName.TestGame1:
                     return new NoneGameControl();
+                case GameName.BasePressureTest:
+                    return new NoneGameControl();
                 default:
                     throw new InvalidGameException();
             }
@@ -45,11 +48,13 @@ namespace LightSpace_WPF_Engine.Models.Models
                 case GameName.Template:
                     return new Vector2(1, 1);
                 case GameName.TestGame0:
-                    return new Vector2(2, 2);
+                    return new Vector2(4, 4);
                 case GameName.TestGame1:
                     return new Vector2(1, 1);
+                case GameName.BasePressureTest:
+                    return new Vector2(4, 4);
                 default:
-                    return new Vector2(5,5);
+                    return new Vector2(5, 5);
             }
         }
 
@@ -66,6 +71,8 @@ namespace LightSpace_WPF_Engine.Models.Models
                     return "Currently loaded is Test Game (0), which is used as a development tool to test functionality.";
                 case GameName.TestGame1:
                     return "Sets all tiles to a single color to test if connection works.";
+                case GameName.BasePressureTest:
+                    return "Surrounds sensors that have detected touch with red lights.";
                 default:
                     throw new InvalidGameException();
             }
@@ -77,16 +84,14 @@ namespace LightSpace_WPF_Engine.Models.Models
             {
                 case GameName.None:
                     return Properties.Resources.EmptyIcon;
-
                 case GameName.Template:
                     return Properties.Resources.TemplateIcon;
-
                 case GameName.TestGame0:
                     return Properties.Resources.SkippingRopeIcon;
-
                 case GameName.TestGame1:
                     return Properties.Resources.Testicon;
-
+                case GameName.BasePressureTest:
+                    return Properties.Resources.Testicon;
                 default:
                     return Properties.Resources.EmptyIcon;
             }
@@ -104,6 +109,8 @@ namespace LightSpace_WPF_Engine.Models.Models
                     return new SkippingRopeGame();
                 case GameName.TestGame1:
                     return new FullColorGame();
+                case GameName.BasePressureTest:
+                    return new BasePressureGame();
                 default:
                     return new RunningGameBehavior();
             }

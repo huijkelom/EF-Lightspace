@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Threading.Tasks;
 using LightSpace_WPF_Engine.Models.Models.Logging;
 using LightSpace_WPF_Engine.Models.Utility;
 
@@ -17,10 +18,12 @@ namespace LightSpace_WPF_Engine.Models.Models
         public Vector2 Position { get; set; } = Vector2.Zero();
 
         // Should be 64 in total. (8*8)
-        public Light[,] Lights { get; set; } = new Light[0,0];
+        public Light[,] Lights { get; set; } = new Light[0, 0];
 
         // Should be 16 in total. (4*4)
-        public Sensor[,] Sensors { get; set; } = new Sensor[0,0];
+        public Sensor[,] Sensors { get; set; } = new Sensor[0, 0];
+
+        private object lockObject = new object();
 
         public Tile(short tileId)
         {
@@ -32,16 +35,29 @@ namespace LightSpace_WPF_Engine.Models.Models
         {
             Position = new Vector2(0, 0);
             Lights = new Light[8, 8];
-            Sensors  = new Sensor[4,4];
+            Sensors = new Sensor[4, 4];
+        }
+
+        public void SetSensorDetectionByNumber(short number, bool value)
+        {
+            lock (lockObject)
+            {
+                var x = (int)Math.Floor((double)(number / Sensors.GetLength(0)));
+                var y = number % Sensors.GetLength(1);
+                Sensors[x, y].PressureDetected = value;
+            }
         }
 
         public void SetTileColor(Color color)
         {
-            for (var i = 0; i < Lights.GetLength(0); i++)
+            lock (lockObject)
             {
-                for (var j = 0; j < Lights.GetLength(1); j++)
+                for (var i = 0; i < Lights.GetLength(0); i++)
                 {
-                    Lights[i,j].SetColor(color);
+                    for (var j = 0; j < Lights.GetLength(1); j++)
+                    {
+                        Lights[i, j].SetColor(color);
+                    }
                 }
             }
         }
@@ -62,7 +78,7 @@ namespace LightSpace_WPF_Engine.Models.Models
             {
                 try
                 {
-                    lights.Add(Lights[positions[index].X,positions[index].Y]);
+                    lights.Add(Lights[positions[index].X, positions[index].Y]);
                 }
                 catch (IndexOutOfRangeException exception)
                 {
@@ -91,93 +107,6 @@ namespace LightSpace_WPF_Engine.Models.Models
                     exception);
                 return null;
             }
-        }
-
-        public static int GetTrueListId(Tile[,] tiles, Vector2 pos)
-        {
-            var id = -1;
-            for (var tileX = 0; tileX < tiles.GetLength(0); tileX++)
-            {
-                for (var tileY = 0; tileY < tiles.GetLength(1); tileY++)
-                {
-                    if (tiles[tileX, tileY].Position.CompareTo(pos))
-                    {
-                        id = (tileX * tiles.GetLength(1)) + tileY;
-                        return id;
-                    }
-                }
-            }
-            return id;
-        }
-
-        public static Tile[,] GetDebugTiles(
-            int tileSizeX, int tileSizeY, 
-            int lightSizeX, int lightSizeY, 
-            int pressurePointSizeX, int pressurePointSizeY,
-            bool colored)
-        {
-            var tiles = new Tile[tileSizeX, tileSizeY];
-            for (var tileX = 0; tileX < tiles.GetLength(0); tileX++)
-            {
-                for (var tileY = 0; tileY < tiles.GetLength(1); tileY++)
-                {
-                    var tileId = (short)((tileX * tileSizeX) + tileY);
-                    tiles[tileX, tileY] = new Tile(tileId)
-                    {
-                        TileId = tileId,
-                        Position = new Vector2(tileX,tileY),
-                        Lights = GetDebugLights(tileX, tileSizeX, tileY, tileSizeY, lightSizeX, lightSizeY, colored),
-                        Sensors = GetDebugPressurePoints(pressurePointSizeX, pressurePointSizeY,tileId)
-                    };
-                }
-            }
-            return tiles;
-        }
-
-        public static Light[,] GetDebugLights(int tileX, int tileSizeX, int tileY, int tileSizeY, int lightSizeX, int lightSizeY, bool colored)
-        {
-            var xColorMultiplier = 255 / (tileSizeX * lightSizeX);
-            var yColorMultiplier = 255 / (tileSizeY * lightSizeY);
-
-            var lights = new Light[lightSizeX, lightSizeY];
-            for (var lightX = 0; lightX < lights.GetLength(0); lightX++)
-            {
-                for (var lightY = 0; lightY < lights.GetLength(1); lightY++)
-                {
-                    if (colored)
-                    {
-                        lights[lightX, lightY] = new Light(
-                            new Vector2(lightX, lightY),
-                            new Vector3(
-                                (tileX * lightSizeX + lightX) * xColorMultiplier,
-                                (tileY * lightSizeY + lightY) * yColorMultiplier,
-                                0)
-                        );
-                    }
-                    else
-                    {
-                        lights[lightX, lightY] = new Light(
-                            new Vector2(lightX, lightY),
-                            new Vector3(0,0,0)
-                            );
-                    }
-
-                }
-            }
-            return lights;
-        }
-
-        public static Sensor[,] GetDebugPressurePoints(int pointSizeX, int pointSizeY, int tileId)
-        {
-            var points = new Sensor[pointSizeX, pointSizeY];
-            for (var pointX = 0; pointX < points.GetLength(0); pointX++)
-            {
-                for (var pointY = 0; pointY < points.GetLength(1); pointY++)
-                {
-                    points[pointX, pointY] = new Sensor(tileId,false,new Vector2(pointX,pointY));
-                }
-            }
-            return points;
         }
 
         public override string ToString()

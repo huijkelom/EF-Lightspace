@@ -11,7 +11,7 @@ namespace LightSpace_WPF_Engine.Games.FullColorTest
 {
     public class FullColorGame : RunningGameBehavior
     {
-        public int TicksPerSecond = 5;
+        public int TicksPerSecond = 2;
         public Color TileColor = Colors.Blue();
 
         private int gameFieldWidth;
@@ -37,16 +37,23 @@ namespace LightSpace_WPF_Engine.Games.FullColorTest
 
             backgroundImage = new Bitmap(gameFieldWidth, gameFieldHeight);
             backgroundImage.DrawRectangle(Vector2.Zero(), gameFieldWidth, gameFieldHeight, true, 2, TileColor);
+            Draw();
         }
 
         public override void Update()
         {
             backgroundImage.DrawRectangle(Vector2.Zero(), gameFieldWidth, gameFieldHeight, true, 2, TileColor);
+            Draw();
         }
 
         public override void LateUpdate()
         {
-            // Render
+            Draw();
+
+        }
+
+        public void Draw()
+        {
             Game.Get.TileManager.SetRenderGraphic(backgroundImage);
         }
     }

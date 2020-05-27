@@ -45,16 +45,19 @@ namespace LightSpace_WPF_Engine.Models.Utility
             if (CoreLoop.IsRunning)
             {
                 CoreLoop.StopLoop();
+                TileManager.HardwareController.Stop();
             }
             else
             {
                 CoreLoop.StartLoop();
+                TileManager.HardwareController.Start();
             }
         }
 
         public void ShutDown()
         {
             CoreLoop.StopLoop();
+            TileManager.HardwareController.Stop();
         }
     }
 }

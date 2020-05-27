@@ -62,13 +62,12 @@ namespace LightSpace_WPF_Engine.Games.TestGame
             {
                 return;
             }
-
             var deltaTime = Time.DeltaTime;
             jumpTimer += deltaTime;
             if (jumpTimer > jumpDelay)
             {
                 progressTimer += deltaTime;
-                if (progressTimer > ProgressDelay)
+                if (progressTimer > (ProgressDelay*.95))
                 {
                     columnIndex++;
                     progressTimer = 0;

@@ -18,6 +18,10 @@
             Write += WriteData;
         }
 
+        public abstract void Start();
+
+        public abstract void Stop();
+
         protected abstract void WriteData();
 
         protected abstract void ReadData();

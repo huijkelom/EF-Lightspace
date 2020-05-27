@@ -27,7 +27,6 @@ namespace LightSpace_WPF_Engine.Models.Utility
 
         private Bitmap gameRender;
         public BaseHardwareController HardwareController;
-        public bool UseSimulatedTiles = false;
         public Vector2 FieldSize = Vector2.Zero();
         private readonly object lockObject = new object();
         private bool renderChanged;
@@ -45,7 +44,7 @@ namespace LightSpace_WPF_Engine.Models.Utility
         /// </summary>
         public void GenerateDebugTiles(Vector2 size, bool noHardware)
         {
-            Tiles = Tile.GetDebugTiles(size.X, size.Y, 8, 8, 4, 4,false);
+            Tiles = new Tile[size.Y, size.X].GenerateTiles(size.Y, size.X, 8, 8, 4, 4, false);
             HardwareController.NoHardwareMode = noHardware;
         }
 

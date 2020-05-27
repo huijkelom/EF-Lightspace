@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LightSpace_WPF_Engine.Models.Models.Logging;
 using LightSpace_WPF_Engine.Models.Utility;
 using LightSpace_WPF_Engine.Wpf.Views.MainWindows;
 
@@ -29,10 +30,17 @@ namespace LightSpace_WPF_Engine.Models.Models
             var tiles = Game.Get.TileManager.Tiles;
             foreach (var tile in tiles)
             {
-                if (Tile.GetTrueListId(tiles, tile.Position) == TileNumber)
+                if (tiles.GetTrueListId(Position) == TileNumber)
                 {
-                    Game.Get.TileManager.Tiles[tile.Position.X, tile.Position.Y].Sensors[Position.X, Position.Y]
-                        .PressureDetected = PressureDetected;
+                    try
+                    {
+                        Game.Get.TileManager.Tiles[tile.Position.X, tile.Position.Y].Sensors[Position.X, Position.Y]
+                            .PressureDetected = PressureDetected;
+                    }
+                    catch(Exception exception)
+                    {
+                        ConsoleLogger.WriteToConsole(this,"Tile to modify out of index", exception);
+                    }
                     return;
                 }
             }
