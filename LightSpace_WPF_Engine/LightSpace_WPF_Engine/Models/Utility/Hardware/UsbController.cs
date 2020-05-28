@@ -136,6 +136,7 @@ namespace LightSpace_WPF_Engine.Models.Utility.Hardware
             }
             catch (Exception exception)
             {
+                Stop();
                 ConsoleLogger.WriteToConsole(this, "Error reading from USB hardware.", exception);
             }
         }
