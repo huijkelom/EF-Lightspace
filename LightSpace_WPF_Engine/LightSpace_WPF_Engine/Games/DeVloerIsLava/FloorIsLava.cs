@@ -47,6 +47,29 @@ namespace LightSpace_WPF_Engine.Games.VLoerIsLava
             Game.Get.TileManager.SetRenderGraphic(backgroundImage);
         }
 
+        // Gets random tiles where the player can stand on
+        public void PickRandomTiles()
+        {
+            GoodTiles = new List<Tile>();
+            var tiles = Game.Get.TileManager.Tiles;
+            var rng = new Random();
+
+            // Picks goodTilesAmount goodTiles where the player can stand on
+            for (var index = 0; index < goodTilesAmount; index++)
+            {
+                GoodTiles.Add(tiles[
+                    rng.Next(0, tiles.GetLength(0)),
+                    rng.Next(0, tiles.GetLength(1))
+                ]);
+            }
+
+            // Every round there is one less goodTile untill it gets to 1
+            if (goodTilesAmount > 1)
+            {
+                goodTilesAmount--;
+            }
+        }
+
         // Gives the start signal of the game.
         public void StartGame(Bitmap tempBG)
         {
