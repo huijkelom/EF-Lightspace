@@ -185,6 +185,25 @@ namespace LightSpace_WPF_Engine.Games.VLoerIsLava
             Game.Get.TileManager.SetRenderGraphic(bmp);
         }
 
+        // Check collision within tile, if collision found draw outline of the tile yellow
+        public void TrackPlayer(Bitmap tempBG)
+        {
+            // Gets all tiles on the floor and stores them in allTiles
+            var allTiles = Game.Get.TileManager.Tiles;
+
+            // Goes through all the tiles in allTiles
+            foreach (var tile in allTiles)
+            {
+                // If a sensor is activated in the tile it will outline the tile yellow
+                if (tile.AnyActiveSensorsInTile())
+                {
+                    var pos = new Vector2(tile.Position.X * lightAmount, tile.Position.Y * lightAmount);
+
+                    tempBG.DrawRectangle(pos, lightAmount - 1, lightAmount - 1, false, 0, Colors.Yellow());
+                }
+            }
+        }
+
         // Gets random tiles where the player can stand on
         public void PickRandomTiles()
         {
