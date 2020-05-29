@@ -47,6 +47,22 @@ namespace LightSpace_WPF_Engine.Games.VLoerIsLava
             Game.Get.TileManager.SetRenderGraphic(backgroundImage);
         }
 
+        // Draws all the goodtiles on the background
+        private void DrawGoodTiles(Bitmap tempBG)
+        {
+            if (GoodTiles.Count > 0)
+            {
+                foreach (var tile in GoodTiles)
+                {
+                    var pos = new Vector2(tile.Position.X * lightAmount, tile.Position.Y * lightAmount);
+                    var color = Colors.Green();
+
+                    // Draw them at height&width = light amount. first x&y position is automatically added.
+                    tempBG.DrawRectangle(pos, lightAmount - 1, lightAmount - 1, true, 0, color);
+                }
+            }
+        }
+
         // Draws the background on the floor and shows this in the program
         public void Draw(Bitmap bmp)
         {
