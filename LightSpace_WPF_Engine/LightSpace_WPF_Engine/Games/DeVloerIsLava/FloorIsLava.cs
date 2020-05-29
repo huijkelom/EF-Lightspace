@@ -16,11 +16,17 @@ namespace LightSpace_WPF_Engine.Games.VLoerIsLava
         private int gameFieldHeight;
         private List<Tile> GoodTiles = new List<Tile>();
         private List<Tile> resetTile = new List<Tile>();
-        private int goodTilesAmount = 10;
+        private float counter = 0;
         private int counterStart = 0;
         private int counterEnd = 0;
         private int colorNumber = 0;
+        private double timeProgression = 10;
+        private int goodTilesAmount = 10;
+        private bool firstTime = true;
         private bool startGame = true;
+        private bool setReset = false;
+        private bool gameOver = false;
+        private bool playerInGoodTile = false;
 
         public override void Start()
         {
@@ -45,6 +51,116 @@ namespace LightSpace_WPF_Engine.Games.VLoerIsLava
             backgroundImage = new Bitmap(gameFieldWidth, gameFieldHeight);
             backgroundImage.DrawRectangle(Vector2.Zero(), gameFieldWidth, gameFieldHeight, true, 2, Colors.Black());
             Game.Get.TileManager.SetRenderGraphic(backgroundImage);
+        }
+
+        // The first update, used to select the goodTiles before being drawn
+        public override void Update()
+        {
+            if (!startGame && !gameOver)
+            {
+                counter += Time.DeltaTime;
+
+                // After a specified time the goodTiles are selected
+                if (counter > timeProgression || firstTime)
+                {
+                    PickRandomTiles();
+                    counter = 0;
+                    firstTime = false;
+
+                    // Decreases the time in between rounds, every round
+                    if (timeProgression > 3)
+                    {
+                        timeProgression = timeProgression - (timeProgression * 0.05);
+                    }
+                }
+            }
+        }
+
+        // Is the second update, the main part of the game is handled here.
+        public override void LateUpdate()
+        {
+            var tempBG = backgroundImage.Clone() as Bitmap;
+
+            // Performs the StartGame method multiple times
+            if (startGame && !gameOver)
+            {
+                counter += Time.DeltaTime;
+                if (counter > 1)
+                {
+                    counter = 0;
+                    StartGame(tempBG);
+                }
+            }
+            // Performs the GameOver method multiple times
+            else if (gameOver && !setReset)
+            {
+                counter += Time.DeltaTime;
+
+                if (counter > 0.1)
+                {
+                    counter = 0;
+                    if (counterEnd < 16)
+                    {
+                        GameOver(tempBG);
+                    }
+                    else
+                    {
+                        setReset = true;
+                    }
+                }
+            }
+            // This if draws the goodTiles and the red background, it also tracks the player on the floor
+            else if (!setReset)
+            {
+                counter += Time.DeltaTime;
+                // After a period of time this if statement will be executed
+                if (counter > timeProgression - 1)
+                {
+                    var allTiles = Game.Get.TileManager.Tiles;
+                    playerInGoodTile = false;
+
+                    // Draws all tiles Red on the Background
+                    foreach (var tile in allTiles)
+                    {
+                        var pos = new Vector2(tile.Position.X * lightAmount, tile.Position.Y * lightAmount);
+
+                        tempBG.DrawRectangle(pos, lightAmount - 1, lightAmount - 1, true, 0, Colors.Red());
+                    }
+
+                    // Checks every goodTile if player is on it
+                    foreach (var tile in GoodTiles)
+                    {
+                        if (tile.AnyActiveSensorsInTile())
+                        {
+                            playerInGoodTile = true;
+                        }
+                    }
+
+                    // When Player isnt on a goodTile the game is over
+                    if (!playerInGoodTile)
+                    {
+                        gameOver = true;
+                    }
+                }
+
+                DrawGoodTiles(tempBG);
+                TrackPlayer(tempBG);
+            }
+            // When the game is over a there will be a yellow tile that marks the reset button
+            else
+            {
+                var pos = new Vector2(0 * lightAmount, 0 * lightAmount);
+                tempBG.DrawRectangle(pos, lightAmount - 1, lightAmount - 1, true, 0, Colors.Yellow());
+                foreach (var tile in resetTile)
+                {
+                    if (tile.AnyActiveSensorsInTile())
+                    {
+                        Reset();
+                    }
+                }
+            }
+
+            Draw(tempBG);
         }
 
         // Draws all the goodtiles on the background
