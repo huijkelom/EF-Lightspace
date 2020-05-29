@@ -304,5 +304,22 @@ namespace LightSpace_WPF_Engine.Games.VLoerIsLava
 
             counterEnd++;
         }
+
+        // Resets the game
+        public void Reset()
+        {
+            firstTime = true;
+            startGame = true;
+            setReset = false;
+            gameOver = false;
+            playerInGoodTile = false;
+
+            counterStart = 0;
+            counterEnd = 0;
+            colorNumber = 0;
+
+            goodTilesAmount = GameFieldTileSize.X * GameFieldTileSize.Y / 2;
+            timeProgression = 10;
+        }
     }
 }
