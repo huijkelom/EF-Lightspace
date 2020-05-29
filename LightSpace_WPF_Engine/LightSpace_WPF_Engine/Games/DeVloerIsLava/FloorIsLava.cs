@@ -47,6 +47,12 @@ namespace LightSpace_WPF_Engine.Games.VLoerIsLava
             Game.Get.TileManager.SetRenderGraphic(backgroundImage);
         }
 
+        // Draws the background on the floor and shows this in the program
+        public void Draw(Bitmap bmp)
+        {
+            Game.Get.TileManager.SetRenderGraphic(bmp);
+        }
+
         // Gets random tiles where the player can stand on
         public void PickRandomTiles()
         {
