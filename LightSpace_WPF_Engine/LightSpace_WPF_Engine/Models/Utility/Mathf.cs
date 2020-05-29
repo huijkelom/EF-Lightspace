@@ -13,8 +13,8 @@ namespace LightSpace_WPF_Engine.Models.Utility
         /// </para>
         /// </summary>
         /// <param name="a"> First Endpoint. </param>
-        /// <param name="b"> First Endpoint. </param>
-        /// <param name="t"> First Endpoint. </param>
+        /// <param name="b"> Second Endpoint. </param>
+        /// <param name="t"> Interpolation value. </param>
         /// <returns> Point between <paramref name="a"/> and <paramref name="b"/> determined by interpolant <paramref name="t"/></returns>
         public static float ClampedLerp(float a, float b, float t)
         {
@@ -30,8 +30,8 @@ namespace LightSpace_WPF_Engine.Models.Utility
         /// </para>
         /// </summary>
         /// <param name="a"> First Endpoint. </param>
-        /// <param name="b"> First Endpoint. </param>
-        /// <param name="t"> First Endpoint. </param>
+        /// <param name="b"> Second Endpoint. </param>
+        /// <param name="t"> Interpolation value </param>
         /// <returns> Point between <paramref name="a"/> and <paramref name="b"/> determined by interpolant <paramref name="t"/></returns>
         public static float Lerp(float a, float b, float t)
         {
@@ -46,8 +46,8 @@ namespace LightSpace_WPF_Engine.Models.Utility
         /// </para>
         /// </summary>
         /// <param name="a"> First Endpoint. </param>
-        /// <param name="b"> First Endpoint. </param>
-        /// <param name="t"> First Endpoint. </param>
+        /// <param name="b"> Second Endpoint. </param>
+        /// <param name="t"> Interpolation value </param>
         /// <returns> Point between <paramref name="a"/> and <paramref name="b"/> determined by interpolant <paramref name="t"/></returns>
         public static Vector2 Lerp(Vector2 a, Vector2 b, float t)
         {
@@ -65,8 +65,8 @@ namespace LightSpace_WPF_Engine.Models.Utility
         /// </para>
         /// </summary>
         /// <param name="a"> First Endpoint. </param>
-        /// <param name="b"> First Endpoint. </param>
-        /// <param name="t"> First Endpoint. </param>
+        /// <param name="b"> Second Endpoint. </param>
+        /// <param name="t"> Interpolation value </param>
         /// <returns> Point between <paramref name="a"/> and <paramref name="b"/> determined by interpolant <paramref name="t"/></returns>
         public static Vector3 Lerp(Vector3 a, Vector3 b, float t)
         {
@@ -85,8 +85,8 @@ namespace LightSpace_WPF_Engine.Models.Utility
         /// </para>
         /// </summary>
         /// <param name="a"> First Endpoint. </param>
-        /// <param name="b"> First Endpoint. </param>
-        /// <param name="t"> First Endpoint. </param>
+        /// <param name="b"> Second Endpoint. </param>
+        /// <param name="t"> Interpolation value </param>
         /// <returns> Point between <paramref name="a"/> and <paramref name="b"/> determined by interpolant <paramref name="t"/></returns>
         public static int Lerp(int a, int b, float t)
         {
@@ -101,8 +101,8 @@ namespace LightSpace_WPF_Engine.Models.Utility
         /// </para>
         /// </summary>
         /// <param name="a"> First Endpoint. </param>
-        /// <param name="b"> First Endpoint. </param>
-        /// <param name="t"> First Endpoint. </param>
+        /// <param name="b"> Second Endpoint. </param>
+        /// <param name="t"> Interpolation value </param>
         /// <returns> Point between <paramref name="a"/> and <paramref name="b"/> determined by interpolant <paramref name="t"/></returns>
         public static short Lerp(short a, short b, float t)
         {
