@@ -18,6 +18,8 @@ namespace LightSpace_WPF_Engine.Games.VLoerIsLava
         private List<Tile> resetTile = new List<Tile>();
         private int goodTilesAmount = 10;
         private int counterStart = 0;
+        private int counterEnd = 0;
+        private int colorNumber = 0;
         private bool startGame = true;
 
         public override void Start()
@@ -90,6 +92,37 @@ namespace LightSpace_WPF_Engine.Games.VLoerIsLava
             }
 
             counterStart++;
+        }
+
+        // Gives the end signal of the game
+        public void GameOver(Bitmap tempBG)
+        {
+            var allTiles = Game.Get.TileManager.Tiles;
+            var color = Colors.Red();
+            startGame = true;
+
+            // Sets the color of the floor
+            switch (colorNumber)
+            {
+                case 0:
+                    color = Colors.Red();
+                    colorNumber = 1;
+                    break;
+                case 1:
+                    color = Colors.Black();
+                    colorNumber = 0;
+                    break;
+            }
+
+            //Every tile in allTiles is being drawn on de tempBG with the assigned color
+            foreach (var tile in allTiles)
+            {
+                var pos = new Vector2(tile.Position.X * lightAmount, tile.Position.Y * lightAmount);
+
+                tempBG.DrawRectangle(pos, lightAmount - 1, lightAmount - 1, true, 0, color);
+            }
+
+            counterEnd++;
         }
     }
 }
