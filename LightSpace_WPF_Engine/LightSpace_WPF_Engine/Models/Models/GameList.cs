@@ -13,6 +13,7 @@ using LightSpace_WPF_Engine.Models.Enums;
 using LightSpace_WPF_Engine.Models.Exceptions;
 using LightSpace_WPF_Engine.Models.Utility;
 using LightSpace_WPF_Engine.Wpf.Views.UserControls.CustomControls;
+using LightSpace_WPF_Engine.Games.VLoerIsLava;
 
 namespace LightSpace_WPF_Engine.Models.Models
 {
@@ -30,6 +31,8 @@ namespace LightSpace_WPF_Engine.Models.Models
                     return new TestGameControl();
                 case GameName.TestGame1:
                     return null;
+                case GameName.FloorIsLava:
+                    return new FloorIsLavaControl();
                 default:
                     throw new InvalidGameException();
             }
@@ -65,6 +68,8 @@ namespace LightSpace_WPF_Engine.Models.Models
                     return "Currently loaded is Test Game (0), which is used as a development tool to test functionality.";
                 case GameName.TestGame1:
                     return "";
+                case GameName.FloorIsLava:
+                    return "Currently loaded The floor is lava! \nTry to step in the green tiles, \nbut dont take too long.";
                 default:
                     throw new InvalidGameException();
             }
@@ -103,6 +108,8 @@ namespace LightSpace_WPF_Engine.Models.Models
                     return new SkippingRopeGame();
                 case GameName.TestGame1:
                     return new RunningGameBehavior();
+                case GameName.FloorIsLava:
+                    return new FloorIsLava();
                 default:
                     return new RunningGameBehavior();
             }

@@ -12,5 +12,6 @@ namespace LightSpace_WPF_Engine.Models.Enums
         Template = 1,
         TestGame0 = 2,
         TestGame1 = 3,
+        FloorIsLava = 4,
     }
 }
