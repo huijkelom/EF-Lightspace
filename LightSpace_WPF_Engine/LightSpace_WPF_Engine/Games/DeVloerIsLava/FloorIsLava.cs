@@ -28,8 +28,10 @@ namespace LightSpace_WPF_Engine.Games.VLoerIsLava
         private bool gameOver = false;
         private bool playerInGoodTile = false;
 
+        // Initialized the game, gets the floor size and gets the name and game description
         public override void Start()
         {
+            // Initialized the ticks used in game, gets the Game details and desciption, gets the floorsize
             base.Start();
             Game.Get.CoreLoop.TicksPerSecond = 10;
             GameName = GameName.FloorIsLava;
@@ -37,17 +39,20 @@ namespace LightSpace_WPF_Engine.Games.VLoerIsLava
             var tiles = Game.Get.TileManager.Tiles;
             GameFieldTileSize = new Vector2(tiles.GetLength(0), tiles.GetLength(1));
 
+            // Gets the lightAmount and the sensorAmount from the tileManager
             lightAmount = Game.Get.TileManager.GetLightAmount();
             sensorAmount = Game.Get.TileManager.GetSensorAmount();
 
+            // Calculates the gameFieldWidth and height
             gameFieldWidth = GameFieldTileSize.X * lightAmount;
             gameFieldHeight = GameFieldTileSize.Y * lightAmount;
 
             resetTile.Add(tiles[0, 0]);
 
+            // Calculates the amount of goodTiles used.
             goodTilesAmount = GameFieldTileSize.X * GameFieldTileSize.Y / 2;
 
-
+            // Gets the background and draws it black
             backgroundImage = new Bitmap(gameFieldWidth, gameFieldHeight);
             backgroundImage.DrawRectangle(Vector2.Zero(), gameFieldWidth, gameFieldHeight, true, 2, Colors.Black());
             Game.Get.TileManager.SetRenderGraphic(backgroundImage);
