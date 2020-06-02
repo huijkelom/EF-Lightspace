@@ -13,6 +13,7 @@ using LightSpace_WPF_Engine.Models.Enums;
 using LightSpace_WPF_Engine.Models.Exceptions;
 using LightSpace_WPF_Engine.Models.Utility;
 using LightSpace_WPF_Engine.Wpf.Views.UserControls.CustomControls;
+using LightSpace_WPF_Engine.Games.Dodgeball;
 
 namespace LightSpace_WPF_Engine.Models.Models
 {
@@ -29,6 +30,8 @@ namespace LightSpace_WPF_Engine.Models.Models
                 case GameName.TestGame0:
                     return new TestGameControl();
                 case GameName.TestGame1:
+                    return null;
+                case GameName.Dodgeball:
                     return null;
                 default:
                     throw new InvalidGameException();
@@ -47,8 +50,10 @@ namespace LightSpace_WPF_Engine.Models.Models
                     return new Vector2(2, 2);
                 case GameName.TestGame1:
                     return new Vector2(1, 1);
+                case GameName.Dodgeball:
+                    return new Vector2(4, 4);
                 default:
-                    return new Vector2(5,5);
+                    return new Vector2(5, 5);
             }
         }
 
@@ -65,6 +70,8 @@ namespace LightSpace_WPF_Engine.Models.Models
                     return "Currently loaded is Test Game (0), which is used as a development tool to test functionality.";
                 case GameName.TestGame1:
                     return "";
+                case GameName.Dodgeball:
+                    return "2D dodgeball. Players have to dodge the balls bouncing around to prevent the game from ending.";
                 default:
                     throw new InvalidGameException();
             }
@@ -86,6 +93,9 @@ namespace LightSpace_WPF_Engine.Models.Models
                 case GameName.TestGame1:
                     return Properties.Resources.Testicon;
 
+                case GameName.Dodgeball:
+                    return Properties.Resources.EmptyIcon;
+
                 default:
                     return Properties.Resources.EmptyIcon;
             }
@@ -103,6 +113,8 @@ namespace LightSpace_WPF_Engine.Models.Models
                     return new SkippingRopeGame();
                 case GameName.TestGame1:
                     return new RunningGameBehavior();
+                case GameName.Dodgeball:
+                    return new DodgeballGameBehavior();
                 default:
                     return new RunningGameBehavior();
             }

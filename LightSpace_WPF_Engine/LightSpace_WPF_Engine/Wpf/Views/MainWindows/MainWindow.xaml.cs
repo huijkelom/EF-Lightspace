@@ -264,7 +264,7 @@ namespace LightSpace_WPF_Engine.Wpf.Views.MainWindows
                 new List<CustomImage> {leftViewImage}, false);
 
             //var rightViewImage = new List
-            var sensorTiles = new List<CustomImage>();
+           /* var sensorTiles = new List<CustomImage>();
             foreach (UIElement child in MiddleViewContainer.Children)
             {
                 if (child is CustomImage temp)
@@ -281,7 +281,7 @@ namespace LightSpace_WPF_Engine.Wpf.Views.MainWindows
             }
 
             var updatedSensorImages = ImageExtensions.GetIndividualSensorVisuals(Game.Get.TileManager.Tiles);
-            PopulateCanvas(MiddleViewContainer, updatedSensorImages, false);
+            PopulateCanvas(MiddleViewContainer, updatedSensorImages, false);*/
 
             // Force Refresh elements
             LeftViewContainer.Refresh();

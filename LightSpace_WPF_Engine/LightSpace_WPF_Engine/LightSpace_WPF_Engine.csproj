@@ -103,6 +103,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Games\Dodgeball\DodgeballBallData.cs" />
+    <Compile Include="Games\Dodgeball\DodgeballGameBehavior.cs" />
     <Compile Include="Games\TestGame\SkippingRopeGame.cs" />
     <Compile Include="Models\Enums\EventState.cs" />
     <Compile Include="Models\Enums\GameName.cs" />
