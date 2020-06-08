@@ -3,29 +3,45 @@ using LightSpace_WPF_Engine.Models.Enums;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using LightSpace_WPF_Engine.Models.Models.Logging;
+using LightSpace_WPF_Engine.Models.Models;
 
 namespace LightSpace_WPF_Engine.Games.Dodgeball
 {
+    /// <summary>
+    /// The complete <see cref="RunningGameBehavior"/> of the Dodgeball minigame for the capacitive tile floor.
+    /// </summary>
     class DodgeballGameBehavior : RunningGameBehavior
     {
         #region Technical variables
+        /// <summary> An <see cref="int"/> determining the amount of ticks per second the game runs at. </summary>
         private readonly int ticksPerSecond = 5;
+        /// <summary> An <see cref="int"/> keeping track of the amount of <see cref="Light"/>s per row/column of a <see cref="Tile"/>. </summary>
         private int lightAmount = 1;
+        /// <summary> An <see cref="int"/> keeping track of the game field width in pixels. </summary>
         private int gameFieldWidth = 1;
+        /// <summary> An <see cref="int"/> keeping track of the game field height in pixels. </summary>
         private int gameFieldHeight = 1;
+        /// <summary> A <see cref="Bitmap"/> that works as a blank canvas upon which you <see cref="Draw"/> your gameplay data. </summary>
         private Bitmap backgroundImage;
         #endregion
 
         #region Gameplay variables
+        /// <summary> The amount of dodgeballs active in the game as an <see cref="int"/>. </summary>
         public int DodgeballCount = 3;
+        /// <summary> A <see cref="bool"/> determining wether the game skips its <see cref="Update"/> and <see cref="LateUpdate"/>. </summary>
         public bool Paused = false;
 
+        /// <summary> A <see cref="bool"/> used as a way to incorporate clearing the <see cref="dodgeBalls"/> into the core game loop. </summary>
         private bool clearBalls = false;
+        /// <summary> A List of <see cref="DodgeballBallData"/> keeping track of all positions and velocities of active balls. </summary>
         private List<DodgeballBallData> dodgeBalls;
+        /// <summary> A <see cref="float"/> signifying one end of a range of possible velocity values. </summary>
         private readonly float velocityRangeMin = .3f, velocityRangeMax = 1.7F;
+        /// <summary> A <see cref="Vector2"/> signifying a range of possible ball sizes. </summary>
         private readonly Vector2 ballSizeRange = new Vector2(1, 4);
+        /// <summary> A List of <see cref="Color"/> used as a color scheme of available ball colors. </summary>
         private readonly List<Color> availableBallColors = GenerateColorScheme();
+        /// <summary> A <see cref="Color"/> used for when a <see cref="DodgeballBallData"/> has collision with a player / <see cref="Sensor"/>. </summary>
         private readonly Color ballHitColor = Colors.Red();
         #endregion
 
@@ -150,7 +166,7 @@ namespace LightSpace_WPF_Engine.Games.Dodgeball
         }
 
         /// <summary>
-        /// Check sensor based collision for specified ball.
+        /// Check <see cref="Sensor"/> based collision for specified ball.
         /// </summary>
         /// <param name="ball"> Ball to check around for collision. </param>
         /// <returns> True on collision found, False on no collision found.</returns>
@@ -233,7 +249,7 @@ namespace LightSpace_WPF_Engine.Games.Dodgeball
         /// <summary>
         /// Spawns a ball with randomized values within a certain range.
         /// </summary>
-        /// <param name="rand"> The shared Random used to avoid repeating random generation. </param>
+        /// <param name="rand"> The shared <see cref="Random"/> used to avoid repeating random generation. </param>
         private void SpawnBall(Random rand)
         {
             var xVelocity = GetNewVelocity(rand);
@@ -245,10 +261,10 @@ namespace LightSpace_WPF_Engine.Games.Dodgeball
         }
 
         /// <summary>
-        /// Gets a randomized spawn position within a certain range.
+        /// Gets a randomized <see cref="Vector2"/> spawn position within a certain range.
         /// </summary>
-        /// <param name="rand"> The shared Random used to avoid repeating random generation. </param>
-        /// <param name="ballSize"></param>
+        /// <param name="rand"> The shared <see cref="Random"/> used to avoid repeating random generation. </param>
+        /// <param name="ballSize"> The size of the ball to determine how close the origin can spawn to borders. </param>
         /// <returns> A randomized spawn position within a certain range. </returns>
         private Vector2 GetNewSpawnPos(Random rand, int ballSize)
         {
@@ -264,7 +280,7 @@ namespace LightSpace_WPF_Engine.Games.Dodgeball
         /// <summary>
         /// Gets a randomized <see cref="Color"/> from the color scheme list <see cref="availableBallColors"/>.
         /// </summary>
-        /// <param name="rand"> The shared Random used to avoid repeating random generation. </param>
+        /// <param name="rand"> The shared <see cref="Random"/> used to avoid repeating random generation. </param>
         /// <returns> A randomized color from the color scheme list <see cref="availableBallColors"/>. </returns>
         private Color GetNewBallColor(Random rand)
         {
@@ -277,9 +293,9 @@ namespace LightSpace_WPF_Engine.Games.Dodgeball
         }
 
         /// <summary>
-        /// Gets a randomized ball size within a certain range.
+        /// Gets a randomized <see cref="int"/> ball size within a certain range.
         /// </summary>
-        /// <param name="rand"> The shared Random used to avoid repeating random generation. </param>
+        /// <param name="rand"> The shared <see cref="Random"/> used to avoid repeating random generation. </param>
         /// <returns> A randomized ball size within a certain range. </returns>
         private int GetNewBallSize(Random rand)
         {
@@ -287,9 +303,9 @@ namespace LightSpace_WPF_Engine.Games.Dodgeball
         }
 
         /// <summary>
-        /// Gets a randomized velocity value within a certain range.
+        /// Gets a randomized <see cref="float"/> velocity value within a certain range.
         /// </summary>
-        /// <param name="rand"> The shared Random used to avoid repeating random generation. </param>
+        /// <param name="rand"> The shared <see cref="Random"/> used to avoid repeating random generation. </param>
         /// <returns> A randomized velocity value within a certain range. </returns>
         private float GetNewVelocity(Random rand)
         {

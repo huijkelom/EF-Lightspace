@@ -1,23 +1,28 @@
 ﻿using LightSpace_WPF_Engine.Models.Utility;
-using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using LightSpace_WPF_Engine.Models.Models;
 
 namespace LightSpace_WPF_Engine.Games.Dodgeball
 {
+    /// <summary>
+    /// An object containing all neccesary data for a dodgeball used within <see cref="DodgeballGameBehavior"/>.
+    /// </summary>
     class DodgeballBallData
     {
+        /// <summary> The ball position as a <see cref="float"/> to make more bouncing angles possible. </summary>
         public float BallPositionX = 0, BallPositionY = 0;
-        public float VelocityX = 1, VelocityY = 1;  
+        /// <summary> The ball velocity as a <see cref="float"/> to make more bouncing angles possible. </summary>
+        public float VelocityX = 1, VelocityY = 1;
+        /// <summary> The ball size as an <see cref="int"/>. </summary>
         public int BallSize = 1;
+        /// <summary> The ball <see cref="Color"/> as it's rendered normally. </summary>
         public Color BallColor;
 
+        /// <summary> A <see cref="bool"/> checking Player / <see cref="Sensor"/> collision. </summary>
         public bool IsPlayerColliding = false;
+        /// <summary> A <see cref="bool"/> checking game field border collision. </summary>
         public bool IsFieldColliding = false;
-
+        /// <summary> A <see cref="bool"/> signifying wether hitting the game border should show collision <see cref="Color"/>. </summary>
         public bool ShowCollisionColorOnFieldHit = false;
 
         /// <summary>
