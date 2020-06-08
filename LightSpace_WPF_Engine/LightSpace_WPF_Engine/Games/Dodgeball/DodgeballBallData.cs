@@ -70,5 +70,10 @@ namespace LightSpace_WPF_Engine.Games.Dodgeball
             BallPositionX += VelocityX;
             BallPositionY += VelocityY;
         }
+
+        public override string ToString()
+        {
+            return $"Ball (size:{BallSize} color:{BallColor}) @ X{BallPositionX.ToString("n2")} Y{BallPositionY.ToString("n2")} | Velocity @ X{VelocityX.ToString("n2")} Y{VelocityY.ToString("n2")}";
+        }
     }
 }

@@ -32,7 +32,7 @@ namespace LightSpace_WPF_Engine.Models.Models
                 case GameName.TestGame1:
                     return null;
                 case GameName.Dodgeball:
-                    return null;
+                    return new DodgeballGameControl();
                 default:
                     throw new InvalidGameException();
             }

@@ -157,6 +157,9 @@
     <Compile Include="Wpf\Views\UserControls\CustomControls\CustomGameControlTemplate.xaml.cs">
       <DependentUpon>CustomGameControlTemplate.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Wpf\Views\UserControls\CustomControls\DodgeballGameControl.xaml.cs">
+      <DependentUpon>DodgeballGameControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Wpf\Views\UserControls\CustomControls\NoneGameControl.xaml.cs">
       <DependentUpon>NoneGameControl.xaml</DependentUpon>
     </Compile>
@@ -200,6 +203,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Wpf\Views\UserControls\CustomControls\CustomGameControlTemplate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Wpf\Views\UserControls\CustomControls\DodgeballGameControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
